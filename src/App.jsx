@@ -1,4 +1,7 @@
-import { useState } from 'react'
+//import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { supabase } from './lib/supabaseClient'
+
 import {
   Menu,
   X,
@@ -9,8 +12,25 @@ import {
 } from 'lucide-react'
 
 function App() {
+
   const [language, setLanguage] = useState('EN')
   const [menuOpen, setMenuOpen] = useState(false)
+  useEffect(() => {
+  async function testConnection() {
+    const { data, error } = await supabase
+      .from('categories')
+      .select('id')
+      .limit(1)
+
+    if (error) {
+      console.error('Supabase Error:', error.message)
+    } else {
+      console.log('Supabase Connected Successfully!', data)
+    }
+  }
+
+  testConnection()
+}, [])
 
   const content = {
     EN: {
