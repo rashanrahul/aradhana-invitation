@@ -1,6 +1,9 @@
-//import { useState } from 'react'
 import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
+
+import AdminLogin from './pages/AdminLogin'
+import AdminCategories from './pages/AdminCategories'
 
 import {
   Menu,
@@ -11,7 +14,7 @@ import {
   Sparkles,
 } from 'lucide-react'
 
-function App() {
+function HomePage() {
 
   const [language, setLanguage] = useState('EN')
   const [menuOpen, setMenuOpen] = useState(false)
@@ -289,6 +292,29 @@ function App() {
       </footer>
 
     </div>
+  )
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        {/* Customer Homepage */}
+        <Route path="/" element={<HomePage />} />
+
+        {/* Admin Login */}
+        <Route path="/admin" element={<AdminLogin />} />
+
+        {/* Admin Category Management */}
+        <Route
+          path="/admin/categories"
+          element={<AdminCategories />}
+        />
+
+        {/* Unknown URLs */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 
