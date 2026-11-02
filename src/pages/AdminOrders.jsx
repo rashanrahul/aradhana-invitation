@@ -162,7 +162,7 @@ export default function AdminOrders() {
 
         {/* Header */}
         <button
-          onClick={() => navigate('/admin/categories')}
+          onClick={() => navigate('/admin/dashboard/categories')}
           className="mb-6 flex items-center gap-2 text-gray-600 hover:text-black"
         >
           <ArrowLeft size={18} />

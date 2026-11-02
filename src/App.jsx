@@ -8,6 +8,7 @@ import TrackOrder from './pages/TrackOrder'
 
 import AdminLogin from './pages/AdminLogin'
 import AdminCategories from './pages/AdminCategories'
+import AdminDashboard, { DashboardOverview } from './pages/AdminDashboard'
 
 import {
   Menu,
@@ -434,24 +435,28 @@ function App() {
         {/* Admin Login */}
         <Route path="/admin" element={<AdminLogin />} />
 
-        {/* Admin Category Management */}
+        {/* Secured admin dashboard and management sections */}
+        <Route path="/admin/dashboard" element={<AdminDashboard />}>
+          <Route index element={<DashboardOverview />} />
+          <Route path="categories" element={<AdminCategories />} />
+          <Route path="products" element={<AdminProducts />} />
+          <Route path="orders" element={<AdminOrders />} />
+        </Route>
+
         <Route
           path="/admin/categories"
-          element={<AdminCategories />}
+          element={<Navigate to="/admin/dashboard/categories" replace />}
         />
-      
-        <Route path="/track-order" element={<TrackOrder />} />
-
-        {/* Admin Product Management */}
         <Route
           path="/admin/products"
-          element={<AdminProducts />}
+          element={<Navigate to="/admin/dashboard/products" replace />}
         />
-
         <Route
           path="/admin/orders"
-          element={<AdminOrders />}
+          element={<Navigate to="/admin/dashboard/orders" replace />}
         />
+
+        <Route path="/track-order" element={<TrackOrder />} />
 
         <Route path="/products" element={<ProductsPage />} />
 

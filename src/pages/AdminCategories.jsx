@@ -1,5 +1,6 @@
 
 import { useEffect, useState } from 'react'
+import { Navigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 
 export default function AdminCategories() {
@@ -222,14 +223,7 @@ export default function AdminCategories() {
   }
 
   if (!isAdmin) {
-    return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50 p-6">
-        <div className="bg-white rounded-xl shadow p-8 text-center max-w-md">
-          <h2 className="text-xl font-bold mb-3">Admin Access Required</h2>
-          <p className="text-gray-600">{message}</p>
-        </div>
-      </div>
-    )
+    return <Navigate to="/" replace />
   }
 
   return (

@@ -36,7 +36,7 @@ export default function AdminLogin() {
         throw new Error('Access denied. Admin account required.')
       }
 
-      navigate('/admin/categories', { replace: true })
+      navigate('/admin/dashboard', { replace: true })
     } catch (err) {
       setError(err.message || 'Login failed. Please try again.')
     } finally {

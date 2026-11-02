@@ -1,5 +1,5 @@
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { Search, Package, Loader2, CheckCircle, Clock } from 'lucide-react'
 
@@ -7,15 +7,57 @@ export default function TrackOrder() {
   const [orderNumber, setOrderNumber] = useState('')
   const [phone, setPhone] = useState('')
   const [order, setOrder] = useState(null)
+  const [trackedPhone, setTrackedPhone] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
+  const [refreshError, setRefreshError] = useState('')
+
+  useEffect(() => {
+    if (!order?.order_number || !trackedPhone) return undefined
+
+    let active = true
+    let timeoutId
+
+    async function refreshOrderStatus() {
+      const { data, error: refreshFailure } = await supabase.rpc(
+        'track_customer_order',
+        {
+          p_order_number: order.order_number,
+          p_customer_phone: trackedPhone,
+        }
+      )
+
+      if (!active) return
+
+      if (refreshFailure) {
+        console.error('Unable to refresh tracked order:', refreshFailure)
+        setRefreshError('Order status could not be refreshed. Retrying...')
+      } else if (data) {
+        setOrder(data)
+        setRefreshError('')
+      } else {
+        setRefreshError('Order status could not be refreshed. Retrying...')
+      }
+
+      timeoutId = window.setTimeout(refreshOrderStatus, 5000)
+    }
+
+    timeoutId = window.setTimeout(refreshOrderStatus, 5000)
+
+    return () => {
+      active = false
+      window.clearTimeout(timeoutId)
+    }
+  }, [order?.order_number, trackedPhone])
 
   async function handleTrack(e) {
     e.preventDefault()
 
     setLoading(true)
     setError('')
+    setRefreshError('')
     setOrder(null)
+    setTrackedPhone('')
 
     const { data, error } = await supabase.rpc(
       'track_customer_order',
@@ -39,6 +81,7 @@ export default function TrackOrder() {
     }
 
     setOrder(data)
+    setTrackedPhone(phone.trim())
   }
 
   const statuses = [
@@ -152,6 +195,11 @@ export default function TrackOrder() {
               <h3 className="mb-5 text-xl font-bold text-gray-800">
                 Order Status
               </h3>
+              {refreshError && (
+                <p className="mb-4 text-sm text-amber-700" role="status">
+                  {refreshError}
+                </p>
+              )}
 
               {isCancelled ? (
                 <div className="rounded-xl bg-red-50 p-5 text-center">

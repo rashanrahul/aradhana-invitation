@@ -8,6 +8,7 @@ const [products, setProducts] = useState([])
 const [categories, setCategories] = useState([])
 const [cart, setCart] = useState([])
 const [loading, setLoading] = useState(true)
+const [loadError, setLoadError] = useState('')
 
 const [searchParams] = useSearchParams()
 const categoryFromUrl = searchParams.get('category')
@@ -28,44 +29,68 @@ const [selectedCategory, setSelectedCategory] = useState(
   const [orderError, setOrderError] = useState('')
 
   useEffect(() => {
-    fetchData()
+    let mounted = true
+
+    async function refreshData() {
+      const [productResult, categoryResult] = await Promise.all([
+        supabase
+          .from('products')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false }),
+
+        supabase
+          .from('categories')
+          .select('*')
+          .eq('is_active', true)
+          .order('created_at', { ascending: false })
+      ])
+
+      if (!mounted) return
+
+      const errors = [productResult.error, categoryResult.error].filter(Boolean)
+
+      if (errors.length > 0) {
+        errors.forEach(error => console.error(error))
+        setLoadError('Unable to load invitations. Please try again later.')
+      } else {
+        setProducts(productResult.data || [])
+        setCategories(categoryResult.data || [])
+        setLoadError('')
+      }
+
+      setLoading(false)
+    }
+
+    refreshData()
+
+    const channel = supabase
+      .channel('customer-products-and-categories')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'products' },
+        refreshData
+      )
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'categories' },
+        refreshData
+      )
+      .subscribe(status => {
+        if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          console.error(`Product live updates failed: ${status}`)
+        }
+      })
+
+    return () => {
+      mounted = false
+      supabase.removeChannel(channel)
+    }
   }, [])
 
   useEffect(() => {
   setSelectedCategory(categoryFromUrl || 'all')
 }, [categoryFromUrl])
-
-  async function fetchData() {
-    setLoading(true)
-
-    const [productResult, categoryResult] = await Promise.all([
-      supabase
-        .from('products')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false }),
-
-      supabase
-        .from('categories')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-    ])
-
-    if (productResult.error) {
-      console.error(productResult.error)
-    } else {
-      setProducts(productResult.data || [])
-    }
-
-    if (categoryResult.error) {
-      console.error(categoryResult.error)
-    } else {
-      setCategories(categoryResult.data || [])
-    }
-
-    setLoading(false)
-  }
 
   function addToCart(product) {
     setCart(current => {
@@ -202,6 +227,10 @@ async function submitOrder(e) {
           <div className="flex justify-center py-20">
             <Loader2 className="animate-spin" size={35} />
           </div>
+        ) : loadError ? (
+          <p className="py-20 text-center text-red-600" role="alert">
+            {loadError}
+          </p>
         ) : filteredProducts.length === 0 ? (
           <p className="py-20 text-center text-gray-500">
             No products available yet.
