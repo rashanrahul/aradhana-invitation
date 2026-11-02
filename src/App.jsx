@@ -125,18 +125,18 @@ function HomePage() {
   const t = content[language]
 
   return (
-    <div className="min-h-screen bg-[#fffaf7] text-[#42332f]">
+    <div className="storefront min-h-screen text-[#42332f]">
 
       {/* Announcement */}
-      <div className="bg-[#76534b] py-2 text-center text-xs tracking-[2px] text-white">
+      <div className="announcement-bar text-center text-white">
         CREATE BEAUTIFUL MEMORIES WITH ARADHANA
       </div>
 
       {/* Navbar */}
-      <header className="sticky top-0 z-50 border-b border-[#eee3dd] bg-[#fffaf7]/95 backdrop-blur">
+      <header className="store-header sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
 
-          <div>
+          <div className="store-brand">
             <h1 className="text-2xl font-serif font-bold tracking-[3px] text-[#76534b]">
               ARADHANA
             </h1>
@@ -146,7 +146,7 @@ function HomePage() {
           </div>
 
           
-<nav className="hidden items-center gap-7 md:flex">
+<nav className="store-nav hidden items-center gap-7 md:flex">
   <a href="#" className="hover:text-[#a77b6e]">
     {t.home}
   </a>
@@ -169,7 +169,7 @@ function HomePage() {
 
   <Link
     to="/track-order"
-    className="border border-[#76534b] px-4 py-2 text-sm transition hover:bg-[#76534b] hover:text-white"
+    className="track-link border border-[#76534b] transition hover:bg-[#76534b] hover:text-white"
   >
     {t.trackOrder}
   </Link>
@@ -179,18 +179,24 @@ function HomePage() {
           <div className="flex items-center gap-4">
             <button
               onClick={() => setLanguage(language === 'EN' ? 'SI' : 'EN')}
-              className="border border-[#76534b] px-3 py-2 text-xs tracking-wider hover:bg-[#76534b] hover:text-white"
+              className="language-toggle border border-[#76534b] text-xs tracking-wider hover:bg-[#76534b] hover:text-white"
             >
               {language === 'EN' ? 'සිංහල' : 'ENGLISH'}
             </button>
 
-            <button className="hidden md:block">
-              <ShoppingBag size={20} />
-            </button>
+              <Link
+                to="/products"
+                className="store-bag-link hidden md:grid"
+                aria-label="Browse invitation designs"
+              >
+                <ShoppingBag size={18} />
+              </Link>
 
             <button
               className="md:hidden"
               onClick={() => setMenuOpen(!menuOpen)}
+              aria-label={menuOpen ? 'Close navigation menu' : 'Open navigation menu'}
+              aria-expanded={menuOpen}
             >
               {menuOpen ? <X /> : <Menu />}
             </button>
@@ -199,7 +205,7 @@ function HomePage() {
 
         
 {menuOpen && (
-  <nav className="flex flex-col gap-5 border-t p-6 md:hidden">
+  <nav className="store-mobile-nav flex flex-col gap-5 border-t p-6 md:hidden">
     <a href="#" onClick={() => setMenuOpen(false)}>
       {t.home}
     </a>
@@ -236,29 +242,29 @@ function HomePage() {
       </header>
 
       {/* Hero Section */}
-      <section className="relative flex min-h-[600px] items-center overflow-hidden">
+      <section className="store-hero relative flex min-h-[600px] items-center overflow-hidden">
         <img
           src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?w=1800"
           alt="Elegant wedding invitation celebration"
           className="absolute inset-0 h-full w-full object-cover"
         />
 
-        <div className="absolute inset-0 bg-black/40" />
+        <div         className="store-hero-shade absolute inset-0" />
 
-        <div className="relative mx-auto w-full max-w-7xl px-8 py-24 text-white">
+        <div className="store-hero-content relative mx-auto w-full px-8 py-24 text-white">
           <div className="max-w-2xl">
-            <p className="mb-6 text-sm tracking-[4px]">
+            <p className="store-hero-kicker mb-6">
               <Sparkles className="mr-2 inline" size={16} />
               {t.heroSmall}
             </p>
 
-            <h2 className="font-serif text-5xl leading-tight md:text-7xl">
+            <h2 className="store-hero-title">
               {t.heroTitle}
               <br />
               {t.heroTitle2}
             </h2>
 
-            <p className="mt-7 max-w-lg text-lg leading-8 text-white/85">
+            <p className="store-hero-description mt-7">
               {t.heroDescription}
             </p>
 
@@ -266,7 +272,7 @@ function HomePage() {
 <div className="mt-9 flex flex-wrap gap-4">
   <Link
     to="/products"
-    className="inline-flex items-center gap-3 bg-[#b58b79] px-8 py-4 text-sm tracking-wider transition hover:bg-white hover:text-[#76534b]"
+    className="primary-store-button inline-flex items-center gap-3 text-sm tracking-wider"
   >
     {t.explore}
     <ArrowRight size={17} />
@@ -274,7 +280,7 @@ function HomePage() {
 
   <Link
     to="/track-order"
-    className="inline-flex items-center gap-3 border border-white px-8 py-4 text-sm tracking-wider transition hover:bg-white hover:text-[#76534b]"
+    className="secondary-store-button inline-flex items-center gap-3 border text-sm tracking-wider"
   >
     {t.trackOrder}
     <ShoppingBag size={17} />
@@ -286,14 +292,14 @@ function HomePage() {
       </section>
 
       {/* Categories */}
-      <section id="collections" className="mx-auto max-w-7xl px-6 py-24">
+      <section id="collections" className="collection-section mx-auto px-6 py-24">
 
         <div className="mb-12 text-center">
-          <p className="text-xs tracking-[4px] text-[#a77b6e]">
+          <p className="section-kicker">
             {t.featured}
           </p>
 
-          <h2 className="mt-4 font-serif text-3xl md:text-5xl">
+          <h2 className="section-heading mt-4">
             {t.featuredTitle}
           </h2>
 
@@ -314,7 +320,7 @@ function HomePage() {
           </p>
         ) : (
           <>
-            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4">
+            <div className="collection-grid grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
               {categories.map((category) => {
                 const title = language === 'SI'
                   ? category.name_si || category.name_en
@@ -327,11 +333,11 @@ function HomePage() {
                       <Link
                         key={category.id}
                         to={`/products?category=${category.id}`}
-                        className="group block cursor-pointer"
+                        className="collection-card group block cursor-pointer"
                       >
                         
                         
-                    <div className="overflow-hidden bg-[#eee3dd]">
+                    <div className="collection-image">
                       {category.image_url ? (
                         <img
                           src={category.image_url}
@@ -345,7 +351,7 @@ function HomePage() {
                       )}
                     </div>
 
-                    <div className="flex items-center justify-between py-5">
+                    <div className="collection-card-info flex items-center justify-between py-5">
                       <div>
                         <h3 className="font-serif text-xl">{title}</h3>
                         {description && (
@@ -362,7 +368,7 @@ function HomePage() {
             <div className="mt-12 text-center">
               <Link
                 to="/products"
-              className="inline-block border border-[#76534b] px-10 py-4 text-xs tracking-[2px] transition hover:bg-[#76534b] hover:text-white"
+              className="collection-cta inline-block border border-[#76534b] text-xs tracking-[2px] transition hover:bg-[#76534b] hover:text-white"
               >
             {t.viewAll}
             </Link>
@@ -372,23 +378,23 @@ function HomePage() {
       </section>
 
       {/* About */}
-      <section id="about" className="bg-[#f2e8e2]">
+      <section id="about" className="about-section">
         <div className="mx-auto grid max-w-7xl items-center gap-12 px-6 py-20 md:grid-cols-2">
 
           <div>
             <img
               src="https://images.unsplash.com/photo-1523438885200-e635ba2c371e?w=1000"
               alt="Wedding invitation decoration"
-              className="h-[450px] w-full object-cover"
+              className="about-image w-full object-cover"
             />
           </div>
 
           <div>
-            <p className="text-xs tracking-[4px] text-[#a77b6e]">
+            <p className="section-kicker">
               {t.discover}
             </p>
 
-            <h2 className="mt-5 font-serif text-4xl leading-tight md:text-5xl">
+            <h2 className="about-heading mt-5">
               {t.discoverTitle}
             </h2>
 
@@ -405,7 +411,7 @@ function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="bg-[#493832] px-6 py-14 text-center text-white">
+      <footer id="contact" className="store-footer px-6 py-14 text-center text-white">
         <h2 className="font-serif text-3xl tracking-[4px]">ARADHANA</h2>
         <p className="mt-2 text-xs tracking-[5px]">INVITATION</p>
 

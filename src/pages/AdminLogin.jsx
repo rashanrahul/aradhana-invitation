@@ -1,7 +1,8 @@
 
 import { useState } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import { ArrowLeft, KeyRound, Sparkles } from 'lucide-react'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -45,20 +46,24 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-50 p-5">
-      <div className="w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
+    <div className="admin-login min-h-screen flex items-center justify-center p-5">
+      <div className="admin-login-card w-full max-w-md p-8 md:p-10">
 
         <div className="text-center mb-8">
-          <h1 className="text-3xl font-bold text-gray-900">
+          <div className="admin-login-mark"><Sparkles size={25} /></div>
+          <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a77b6e]">
+            Welcome back
+          </p>
+          <h1 className="admin-login-title text-3xl">
             Aradhana Invitation
           </h1>
-          <p className="text-gray-500 mt-2">
-            Admin Dashboard Login
+          <p className="mt-2 text-sm text-gray-500">
+            Sign in to your studio workspace
           </p>
         </div>
 
         {error && (
-          <div className="bg-red-50 text-red-700 p-3 rounded-lg mb-5 text-sm">
+          <div role="alert" className="mb-5 rounded-lg bg-red-50 p-3 text-sm text-red-700">
             {error}
           </div>
         )}
@@ -75,7 +80,7 @@ export default function AdminLogin() {
               required
               autoComplete="username"
               placeholder="Enter admin email"
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-gray-800"
+              className="w-full border p-3 focus:outline-none focus:ring-2 focus:ring-gray-800"
             />
           </div>
 
@@ -90,22 +95,28 @@ export default function AdminLogin() {
               required
               autoComplete="current-password"
               placeholder="Enter password"
-              className="w-full border rounded-lg p-3 focus:outline-none focus:ring-2 focus:ring-gray-800"
+              className="w-full border p-3 focus:outline-none focus:ring-2 focus:ring-gray-800"
             />
           </div>
 
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-gray-900 text-white py-3 rounded-lg hover:bg-gray-700 disabled:opacity-50"
+            className="admin-login-submit w-full text-white disabled:opacity-50"
           >
-            {loading ? 'Signing in...' : 'Login to Dashboard'}
+            <span className="inline-flex items-center justify-center gap-2">
+              <KeyRound size={17} />
+              {loading ? 'Signing in...' : 'Sign in securely'}
+            </span>
           </button>
         </form>
 
-        <p className="text-xs text-gray-400 text-center mt-6">
-          Authorized administrators only.
-        </p>
+        <div className="mt-7 flex items-center justify-between border-t border-[#eee3dd] pt-5">
+          <p className="text-xs text-gray-400">Authorized administrators only</p>
+          <Link to="/" className="inline-flex items-center gap-1 text-xs font-medium text-[#76534b] hover:text-[#a77b6e]">
+            <ArrowLeft size={14} /> Storefront
+          </Link>
+        </div>
       </div>
     </div>
   )

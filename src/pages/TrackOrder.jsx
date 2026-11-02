@@ -98,15 +98,15 @@ export default function TrackOrder() {
   const isCancelled = order?.status === 'Cancelled'
 
   return (
-    <div className="min-h-screen bg-[#fffaf7] px-5 py-16">
+    <div className="tracking-page min-h-screen px-5 py-16">
       <div className="mx-auto max-w-2xl">
 
         <div className="mb-10 text-center">
-          <div className="mb-4 flex justify-center">
-            <Package size={48} className="text-rose-600" />
+          <div className="admin-login-mark mb-4">
+            <Package size={28} className="text-[#76534b]" />
           </div>
 
-          <h1 className="text-4xl font-bold text-gray-800">
+          <h1 className="tracking-heading">
             Track Your Order
           </h1>
 
@@ -117,7 +117,7 @@ export default function TrackOrder() {
 
         <form
           onSubmit={handleTrack}
-          className="space-y-4 rounded-2xl bg-white p-7 shadow-sm"
+          className="tracking-card space-y-4 shadow-sm"
         >
           <div>
             <label className="mb-2 block font-medium text-gray-700">
@@ -158,7 +158,7 @@ export default function TrackOrder() {
           <button
             type="submit"
             disabled={loading}
-            className="flex w-full items-center justify-center gap-2 rounded-full bg-rose-600 py-3 font-semibold text-white hover:bg-rose-700 disabled:opacity-50"
+            className="tracking-action flex w-full items-center justify-center gap-2 py-3 disabled:opacity-50"
           >
             {loading ? (
               <>
@@ -175,14 +175,14 @@ export default function TrackOrder() {
         </form>
 
         {order && (
-          <div className="mt-8 rounded-2xl bg-white p-7 shadow-sm">
+          <div className="tracking-card mt-8 shadow-sm">
 
             <div className="border-b pb-5">
               <p className="text-sm text-gray-500">
                 Tracking Number
               </p>
 
-              <h2 className="mt-1 break-all text-2xl font-bold text-rose-600">
+              <h2 className="mt-1 break-all text-2xl font-bold text-[#76534b]">
                 {order.order_number}
               </h2>
 

@@ -177,11 +177,14 @@ async function submitOrder(e) {
 
 
   return (
-    <div className="min-h-screen bg-[#fffaf7] px-5 py-12">
+    <div className="catalog-page min-h-screen px-5 py-12">
       <div className="mx-auto max-w-7xl">
 
         <div className="mb-10 text-center">
-          <h1 className="text-4xl font-bold text-gray-800">
+          <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#a77b6e]">
+            Thoughtfully made for your moments
+          </p>
+          <h1 className="catalog-heading">
             Our Invitations
           </h1>
           <p className="mt-3 text-gray-500">
@@ -192,10 +195,8 @@ async function submitOrder(e) {
         <div className="mb-8 flex flex-wrap justify-center gap-3">
           <button
             onClick={() => setSelectedCategory('all')}
-            className={`rounded-full px-5 py-2 ${
-              selectedCategory === 'all'
-                ? 'bg-rose-600 text-white'
-                : 'bg-white text-gray-700'
+            className={`catalog-filter rounded-full px-5 py-2.5 ${
+              selectedCategory === 'all' ? 'is-selected' : ''
             }`}
           >
             All
@@ -205,10 +206,8 @@ async function submitOrder(e) {
             <button
               key={category.id}
               onClick={() => setSelectedCategory(category.id)}
-              className={`rounded-full px-5 py-2 ${
-                selectedCategory === category.id
-                  ? 'bg-rose-600 text-white'
-                  : 'bg-white text-gray-700'
+              className={`catalog-filter rounded-full px-5 py-2.5 ${
+                selectedCategory === category.id ? 'is-selected' : ''
               }`}
             >
               {category.name_en}
@@ -217,7 +216,7 @@ async function submitOrder(e) {
         </div>
 
         <div className="mb-6 flex justify-end">
-          <div className="flex items-center gap-2 rounded-full bg-white px-5 py-3 shadow-sm">
+          <div className="flex items-center gap-2 rounded-full border border-[#eadfd8] bg-[#fffdfa] px-5 py-3 shadow-sm">
             <ShoppingCart />
             <span>{cartCount} items</span>
           </div>
@@ -240,12 +239,12 @@ async function submitOrder(e) {
             {filteredProducts.map(product => (
               <div
                 key={product.id}
-                className="overflow-hidden rounded-2xl bg-white shadow-sm"
+                className="catalog-product-card"
               >
                 <img
                   src={product.image_url || 'https://placehold.co/600x400?text=Invitation'}
                   alt={product.name_en}
-                  className="h-64 w-full object-cover"
+                  className="catalog-product-image h-64 w-full object-cover"
                 />
 
                 <div className="p-5">
@@ -258,13 +257,13 @@ async function submitOrder(e) {
                   </p>
 
                   <div className="mt-5 flex items-center justify-between">
-                    <span className="text-xl font-bold text-rose-600">
+                    <span className="catalog-price text-xl font-bold">
                       LKR {Number(product.price).toLocaleString()}
                     </span>
 
                     <button
                       onClick={() => addToCart(product)}
-                      className="flex items-center gap-2 rounded-full bg-rose-600 px-4 py-2 text-white hover:bg-rose-700"
+                      className="catalog-action flex items-center gap-2 px-4 py-2"
                     >
                       <Plus size={17} />
                       Add
@@ -277,7 +276,7 @@ async function submitOrder(e) {
         )}
 
         {cart.length > 0 && (
-          <div className="mt-12 rounded-2xl bg-white p-6 shadow-sm">
+          <div className="catalog-cart mt-12">
             <h2 className="mb-5 flex items-center gap-2 text-2xl font-bold">
               <ShoppingCart />
               Your Cart
@@ -322,7 +321,7 @@ async function submitOrder(e) {
 
             <button
               onClick={() => setShowCheckout(true)}
-              className="mt-6 w-full rounded-full bg-rose-600 py-3 font-semibold text-white hover:bg-rose-700"
+              className="catalog-action mt-6 w-full py-3"
             >
               Proceed to Checkout
             </button>
@@ -331,7 +330,7 @@ async function submitOrder(e) {
 
         
 {orderResult ? (
-  <div className="mx-auto mt-10 max-w-xl rounded-2xl bg-white p-8 text-center shadow-lg">
+  <div className="tracking-card mx-auto mt-10 max-w-xl text-center shadow-lg">
     <div className="mb-4 text-5xl">🎉</div>
 
     <h2 className="text-2xl font-bold text-gray-800">
@@ -342,12 +341,12 @@ async function submitOrder(e) {
       Thank you! Your order has been received.
     </p>
 
-    <div className="my-6 rounded-xl bg-rose-50 p-5">
+    <div className="my-6 rounded-xl bg-[#f7ede8] p-5">
       <p className="text-sm text-gray-600">
         Your Tracking Number
       </p>
 
-      <p className="mt-2 break-all text-2xl font-bold text-rose-600">
+      <p className="mt-2 break-all text-2xl font-bold text-[#76534b]">
         {orderResult.order_number}
       </p>
     </div>
@@ -365,13 +364,13 @@ async function submitOrder(e) {
         setOrderResult(null)
         setCustomer({ name: '', phone: '', email: '' })
       }}
-      className="mt-6 rounded-full bg-rose-600 px-7 py-3 text-white"
+      className="catalog-action mt-6 px-7 py-3"
     >
       Continue Shopping
     </button>
   </div>
 ) : showCheckout ? (
-  <div className="mx-auto mt-10 max-w-xl rounded-2xl bg-white p-7 shadow-lg">
+  <div className="tracking-card mx-auto mt-10 max-w-xl shadow-lg">
     <h2 className="mb-2 text-2xl font-bold">
       Customer Details
     </h2>
@@ -422,13 +421,13 @@ async function submitOrder(e) {
       </div>
 
       {orderError && (
-        <p className="text-sm text-red-600">{orderError}</p>
+        <p className="text-sm text-red-600" role="alert">{orderError}</p>
       )}
 
       <button
         type="submit"
         disabled={submitting}
-        className="w-full rounded-full bg-rose-600 py-3 font-semibold text-white disabled:opacity-50"
+        className="catalog-action w-full py-3 disabled:opacity-50"
       >
         {submitting ? 'Submitting...' : 'Submit Order'}
       </button>

@@ -7,12 +7,14 @@ import {
   Store,
   LogOut,
   LoaderCircle,
+  Sparkles,
 } from 'lucide-react'
 import {
   Link,
   NavLink,
   Navigate,
   Outlet,
+  useLocation,
   useNavigate,
 } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
@@ -61,7 +63,7 @@ function DashboardOverview() {
   ]
 
   return (
-    <section>
+    <section className="admin-overview">
       <div className="mb-8">
         <p className="text-sm font-medium uppercase tracking-[0.2em] text-[#a77b6e]">
           Aradhana Invitation
@@ -81,7 +83,7 @@ function DashboardOverview() {
           <Link
             key={label}
             to={to}
-            className="rounded-xl border border-[#eee3dd] bg-white p-6 shadow-sm transition hover:-translate-y-0.5 hover:shadow-md"
+            className="admin-overview-card"
           >
             <div className="flex items-center justify-between">
               <span className="font-medium text-gray-600">{label}</span>
@@ -95,7 +97,7 @@ function DashboardOverview() {
         ))}
       </div>
 
-      <div className="mt-8 rounded-xl border border-[#eee3dd] bg-white p-6">
+      <div className="admin-overview-panel mt-8">
         <h2 className="text-lg font-semibold text-[#42332f]">Storefront connection</h2>
         <p className="mt-2 text-sm leading-6 text-gray-600">
           Active categories and products are shown on the customer website. Order updates
@@ -115,8 +117,12 @@ function DashboardOverview() {
 
 export default function AdminDashboard() {
   const navigate = useNavigate()
+  const location = useLocation()
   const [access, setAccess] = useState('checking')
   const [signOutError, setSignOutError] = useState('')
+  const currentSection = navigation.find(({ to, end }) =>
+    end ? location.pathname === to : location.pathname.startsWith(to)
+  )?.label || 'Dashboard'
 
   useEffect(() => {
     let mounted = true
@@ -177,11 +183,14 @@ export default function AdminDashboard() {
   if (access === 'forbidden') return <Navigate to="/" replace />
 
   return (
-    <div className="min-h-screen bg-[#f8f5f2] md:flex">
-      <aside className="bg-[#493832] p-5 text-white md:min-h-screen md:w-64 md:shrink-0">
-        <Link to="/admin/dashboard" className="block">
-          <span className="font-serif text-xl tracking-[0.18em]">ARADHANA</span>
-          <span className="mt-1 block text-[10px] tracking-[0.35em] text-white/70">ADMIN DASHBOARD</span>
+    <div className="admin-shell min-h-screen md:flex">
+      <aside className="admin-sidebar p-5 text-white md:min-h-screen md:w-64 md:shrink-0">
+        <Link to="/admin/dashboard" className="admin-brand">
+          <span className="admin-brand-mark"><Sparkles size={19} /></span>
+          <span>
+            <span className="block font-serif text-lg tracking-[0.12em]">ARADHANA</span>
+            <span className="mt-1 block text-[9px] tracking-[0.27em] text-white/65">STUDIO ADMIN</span>
+          </span>
         </Link>
 
         <nav className="mt-8 flex gap-2 overflow-x-auto md:flex-col" aria-label="Admin dashboard">
@@ -204,7 +213,7 @@ export default function AdminDashboard() {
 
         <button
           onClick={handleSignOut}
-          className="mt-6 flex items-center gap-3 rounded-lg px-4 py-3 text-sm text-white/75 hover:bg-white/10 hover:text-white md:mt-10"
+          className="admin-signout mt-6 flex items-center gap-3 px-4 py-3 text-sm text-white/75 md:mt-10"
         >
           <LogOut size={18} />
           Sign out
@@ -214,7 +223,17 @@ export default function AdminDashboard() {
         )}
       </aside>
 
-      <main className="min-w-0 flex-1 p-5 md:p-8">
+      <main className="admin-main min-w-0 flex-1">
+        <header className="admin-topbar">
+          <div>
+            <p className="admin-topbar-eyebrow">Workspace / {currentSection}</p>
+            <h1 className="admin-topbar-title">{currentSection}</h1>
+          </div>
+          <Link to="/" className="admin-topbar-link" aria-label="View customer storefront">
+            <Store size={17} />
+            <span>View store</span>
+          </Link>
+        </header>
         <Outlet />
       </main>
     </div>

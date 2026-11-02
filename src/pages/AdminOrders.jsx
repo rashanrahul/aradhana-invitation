@@ -157,16 +157,16 @@ export default function AdminOrders() {
   const completedOrders = orders.filter(o => o.status === 'Completed').length
 
   return (
-    <div className="min-h-screen bg-gray-50 p-4 md:p-8">
+    <div className="admin-content admin-orders-page min-h-screen bg-gray-50 p-4 md:p-8">
       <div className="mx-auto max-w-7xl">
 
         {/* Header */}
         <button
-          onClick={() => navigate('/admin/dashboard/categories')}
+          onClick={() => navigate('/admin/dashboard')}
           className="mb-6 flex items-center gap-2 text-gray-600 hover:text-black"
         >
           <ArrowLeft size={18} />
-          Back to Admin
+          Dashboard overview
         </button>
 
         <div className="mb-8 flex flex-wrap items-center justify-between gap-4">
