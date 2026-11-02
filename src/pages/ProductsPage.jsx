@@ -1,7 +1,14 @@
 import { useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
-import { ShoppingCart, Plus, Minus, Loader2 } from 'lucide-react'
+import {
+  ShoppingCart,
+  Plus,
+  Minus,
+  Loader2,
+  Eye,
+  X
+} from 'lucide-react'
 
 export default function ProductsPage() {
 const [products, setProducts] = useState([])
@@ -12,6 +19,11 @@ const [loadError, setLoadError] = useState('')
 
 const [searchParams] = useSearchParams()
 const categoryFromUrl = searchParams.get('category')
+const [selectedProduct, setSelectedProduct] = useState(null)
+
+function closePreview() {
+  setSelectedProduct(null)
+}
 
 const [selectedCategory, setSelectedCategory] = useState(
   categoryFromUrl || 'all'
@@ -256,19 +268,31 @@ async function submitOrder(e) {
                     {product.description_en}
                   </p>
 
-                  <div className="mt-5 flex items-center justify-between">
-                    <span className="catalog-price text-xl font-bold">
-                      LKR {Number(product.price).toLocaleString()}
-                    </span>
+                  <div className="mt-5 flex flex-wrap items-center justify-between gap-3">
+  <span className="catalog-price text-xl font-bold">
+    LKR {Number(product.price).toLocaleString()}
+  </span>
 
-                    <button
-                      onClick={() => addToCart(product)}
-                      className="catalog-action flex items-center gap-2 px-4 py-2"
-                    >
-                      <Plus size={17} />
-                      Add
-                    </button>
-                  </div>
+  <div className="flex items-center gap-2">
+    {product.video_url && (
+      <button
+        onClick={() => setSelectedProduct(product)}
+        className="flex items-center gap-2 rounded-full border border-[#76534b] px-4 py-2 text-sm font-medium text-[#76534b] transition hover:bg-[#76534b] hover:text-white"
+      >
+        <Eye size={17} />
+        Preview
+      </button>
+    )}
+
+    <button
+      onClick={() => addToCart(product)}
+      className="catalog-action flex items-center gap-2 px-4 py-2"
+    >
+      <Plus size={17} />
+      Add
+    </button>
+  </div>
+</div>
                 </div>
               </div>
             ))}
@@ -443,6 +467,42 @@ async function submitOrder(e) {
   </div>
 ) : null}
 
+    {selectedProduct && (
+  <div
+    className="fixed inset-0 z-[100] flex items-center justify-center bg-black/80 p-4"
+    onClick={closePreview}
+  >
+    <div
+      className="relative w-full max-w-3xl overflow-hidden rounded-2xl bg-white p-3 shadow-2xl"
+      onClick={e => e.stopPropagation()}
+    >
+      <div className="mb-3 flex items-center justify-between gap-3 px-2">
+        <h2 className="text-lg font-semibold text-gray-800">
+          {selectedProduct.name_en}
+        </h2>
+
+        <button
+          onClick={closePreview}
+          className="rounded-full bg-gray-100 p-2 text-gray-700 hover:bg-gray-200"
+          aria-label="Close video preview"
+        >
+          <X size={22} />
+        </button>
+      </div>
+
+      <video
+        key={selectedProduct.id}
+        src={selectedProduct.video_url}
+        autoPlay
+        playsInline
+        controls
+        preload="auto"
+        onEnded={closePreview}
+        className="max-h-[75vh] w-full rounded-xl bg-black"
+      />
+    </div>
+  </div>
+)}
 
       </div>
     </div>

@@ -4,7 +4,7 @@ import { supabase } from '../lib/supabaseClient'
 import { useNavigate } from 'react-router-dom'
 import {
   Plus, Pencil, Trash2, ImagePlus, ArrowLeft,
-  Package, X, RefreshCw
+  Package, X, RefreshCw, Video, Play
 } from 'lucide-react'
 
 export default function AdminProducts() {
@@ -16,6 +16,7 @@ export default function AdminProducts() {
   const [saving, setSaving] = useState(false)
   const [editingId, setEditingId] = useState(null)
   const [imageFile, setImageFile] = useState(null)
+  const [videoFile, setVideoFile] = useState(null)
   const [message, setMessage] = useState('')
   const [error, setError] = useState('')
 
@@ -27,6 +28,7 @@ export default function AdminProducts() {
     category_id: '',
     price: '',
     image_url: '',
+    video_url: '',
     is_active: true
   }
 
@@ -104,9 +106,13 @@ export default function AdminProducts() {
     setForm(emptyForm)
     setEditingId(null)
     setImageFile(null)
+    setVideoFile(null)
 
-    const fileInput = document.getElementById('product-image')
-    if (fileInput) fileInput.value = ''
+    const imageInput = document.getElementById('product-image')
+    const videoInput = document.getElementById('product-video')
+
+    if (imageInput) imageInput.value = ''
+    if (videoInput) videoInput.value = ''
   }
 
   function editProduct(product) {
@@ -120,10 +126,13 @@ export default function AdminProducts() {
       category_id: product.category_id || '',
       price: String(product.price ?? ''),
       image_url: product.image_url || '',
+      video_url: product.video_url || '',
       is_active: product.is_active ?? true
     })
 
     setImageFile(null)
+    setVideoFile(null)
+
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
@@ -149,6 +158,43 @@ export default function AdminProducts() {
     return data.publicUrl
   }
 
+  async function uploadVideo() {
+    if (!videoFile) return form.video_url
+
+    const allowedTypes = [
+      'video/mp4',
+      'video/webm',
+      'video/quicktime'
+    ]
+
+    if (!allowedTypes.includes(videoFile.type)) {
+      throw new Error('Please select an MP4, WebM, or MOV video.')
+    }
+
+    if (videoFile.size > 100 * 1024 * 1024) {
+      throw new Error('Video size must be less than 100 MB.')
+    }
+
+    const extension = videoFile.name.split('.').pop().toLowerCase()
+    const fileName = `products/${crypto.randomUUID()}.${extension}`
+
+    const { error: uploadError } = await supabase.storage
+      .from('invitation-videos')
+      .upload(fileName, videoFile, {
+        cacheControl: '3600',
+        upsert: false,
+        contentType: videoFile.type
+      })
+
+    if (uploadError) throw uploadError
+
+    const { data } = supabase.storage
+      .from('invitation-videos')
+      .getPublicUrl(fileName)
+
+    return data.publicUrl
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     setSaving(true)
@@ -160,11 +206,16 @@ export default function AdminProducts() {
         throw new Error('Please enter product names in both languages.')
       }
 
-      if (form.price === '' || Number(form.price) < 0) {
+      if (
+        form.price === '' ||
+        !Number.isFinite(Number(form.price)) ||
+        Number(form.price) < 0
+      ) {
         throw new Error('Please enter a valid product price.')
       }
 
       const imageUrl = await uploadImage()
+      const videoUrl = await uploadVideo()
 
       const productData = {
         name_en: form.name_en.trim(),
@@ -174,6 +225,7 @@ export default function AdminProducts() {
         category_id: form.category_id || null,
         price: Number(form.price),
         image_url: imageUrl || null,
+        video_url: videoUrl || null,
         is_active: form.is_active,
         updated_at: new Date().toISOString()
       }
@@ -193,9 +245,10 @@ export default function AdminProducts() {
 
       if (result.error) throw result.error
 
-      setMessage(editingId
-        ? 'Product updated successfully!'
-        : 'Product added successfully!'
+      setMessage(
+        editingId
+          ? 'Product updated successfully!'
+          : 'Product added successfully!'
       )
 
       resetForm()
@@ -264,7 +317,7 @@ export default function AdminProducts() {
               Products Management
             </h1>
             <p className="mt-2 text-gray-500">
-              Manage your invitation designs and prices.
+              Manage your invitation designs, videos and prices.
             </p>
           </div>
 
@@ -402,6 +455,7 @@ export default function AdminProducts() {
               </div>
             </div>
 
+            {/* Product Image Upload */}
             <div>
               <label className="mb-2 block text-sm font-medium">
                 Product Image
@@ -427,6 +481,58 @@ export default function AdminProducts() {
                   alt="Current product"
                   className="mt-3 h-28 w-28 rounded-lg object-cover"
                 />
+              )}
+            </div>
+
+            {/* Product Video Upload */}
+            <div className="rounded-xl border border-dashed border-gray-300 p-4">
+              <label className="mb-2 flex items-center gap-2 text-sm font-semibold">
+                <Video size={19} />
+                Product Preview Video
+              </label>
+
+              <p className="mb-3 text-sm text-gray-500">
+                Upload an MP4, WebM or MOV video. Maximum size: 100 MB.
+              </p>
+
+              <input
+                id="product-video"
+                type="file"
+                accept="video/mp4,video/webm,video/quicktime"
+                onChange={e => setVideoFile(e.target.files?.[0] || null)}
+                className="w-full rounded-lg border bg-white p-3"
+              />
+
+              {videoFile && (
+                <div className="mt-3 rounded-lg bg-blue-50 p-3 text-sm text-blue-700">
+                  Selected video: {videoFile.name}
+                </div>
+              )}
+
+              {!videoFile && form.video_url && (
+                <div className="mt-4">
+                  <p className="mb-2 text-sm font-medium text-green-700">
+                    <Play size={15} className="mr-1 inline" />
+                    Current video uploaded
+                  </p>
+
+                  <video
+                    src={form.video_url}
+                    controls
+                    preload="metadata"
+                    className="w-full max-w-md rounded-lg bg-black"
+                  />
+
+                  <p className="mt-2 text-xs text-gray-500">
+                    Select a new video above to replace the current video.
+                  </p>
+                </div>
+              )}
+
+              {videoFile && (
+                <p className="mt-2 text-xs text-gray-500">
+                  The selected video will replace the current video when you save.
+                </p>
               )}
             </div>
 
@@ -521,6 +627,19 @@ export default function AdminProducts() {
 
                       <p className="text-lg font-bold">
                         LKR {Number(product.price).toLocaleString('en-LK')}
+                      </p>
+
+                      <p className="text-sm">
+                        {product.video_url ? (
+                          <span className="text-green-700">
+                            <Video size={15} className="mr-1 inline" />
+                            Preview video available
+                          </span>
+                        ) : (
+                          <span className="text-gray-400">
+                            No preview video
+                          </span>
+                        )}
                       </p>
 
                       <div className="flex items-center justify-between gap-2">
