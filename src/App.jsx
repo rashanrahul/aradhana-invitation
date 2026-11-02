@@ -5,6 +5,7 @@ import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
 import ProductsPage from './pages/ProductsPage'
 import TrackOrder from './pages/TrackOrder'
+import WhatsAppButton from './components/WhatsAppButton'
 
 import AdminLogin from './pages/AdminLogin'
 import AdminCategories from './pages/AdminCategories'
@@ -94,7 +95,7 @@ function HomePage() {
       discover: 'A LITTLE MORE ABOUT US',
       discoverTitle: 'Every celebration deserves a beautiful beginning.',
       discoverText: 'At Aradhana Invitation, we believe every special moment deserves an invitation as unique as the occasion itself.',
-      discoverButton: 'Discover Our Story',
+      discoverButton: 'Explore the Collection',
     },
     SI: {
       home: 'මුල් පිටුව',
@@ -118,7 +119,7 @@ function HomePage() {
       discover: 'අපි ගැන තවත්',
       discoverTitle: 'සෑම සැමරුමකටම සුන්දර ආරම්භයක්.',
       discoverText: 'Aradhana Invitation තුළින් ඔබේ ජීවිතයේ විශේෂ අවස්ථාවන් සඳහා සුවිශේෂී ආරාධනා නිර්මාණය කරන්නෙමු.',
-      discoverButton: 'අපි ගැන දැනගන්න',
+      discoverButton: 'අපගේ නිර්මාණ බලන්න',
     }
   }
 
@@ -402,10 +403,10 @@ function HomePage() {
               {t.discoverText}
             </p>
 
-            <button className="mt-8 flex items-center gap-3 border-b border-[#76534b] pb-2 text-sm">
+            <Link to="/products" className="mt-8 inline-flex items-center gap-3 border-b border-[#76534b] pb-2 text-sm">
               {t.discoverButton}
               <ArrowRight size={17} />
-            </button>
+            </Link>
           </div>
         </div>
       </section>
@@ -469,6 +470,7 @@ function App() {
         {/* Unknown URLs */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
+      <WhatsAppButton />
     </BrowserRouter>
   )
 }

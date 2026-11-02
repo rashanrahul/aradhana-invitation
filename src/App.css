@@ -620,6 +620,69 @@ textarea:focus-visible {
   color: var(--ink);
 }
 
+.catalog-topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 16px;
+  margin-bottom: 58px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 18px;
+}
+
+.catalog-brand {
+  display: inline-flex;
+  flex-direction: column;
+  color: var(--clay-dark);
+  line-height: 1;
+}
+
+.catalog-brand span {
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: 19px;
+  font-weight: 700;
+  letter-spacing: 0.18em;
+}
+
+.catalog-brand small {
+  margin-top: 6px;
+  text-align: center;
+  font-size: 8px;
+  letter-spacing: 0.38em;
+}
+
+.catalog-topbar-links {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.catalog-topbar-link {
+  display: inline-flex;
+  min-height: 40px;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  background: #fffdfa;
+  padding: 0 15px;
+  color: #655650;
+  font-size: 12px;
+  font-weight: 600;
+  transition: background 180ms ease, color 180ms ease, border 180ms ease;
+}
+
+.catalog-topbar-link:hover {
+  border-color: var(--clay-dark);
+  background: var(--clay-dark);
+  color: white;
+}
+
+.tracking-topbar {
+  margin-bottom: 62px;
+}
+
 .catalog-filter {
   border: 1px solid var(--line);
   background: #fffdfa;
@@ -656,6 +719,38 @@ textarea:focus-visible {
 .catalog-product-image {
   background: #eee3dd;
   object-fit: cover;
+  transition: transform 500ms ease;
+}
+
+.catalog-product-card:hover .catalog-product-image {
+  transform: scale(1.025);
+}
+
+.catalog-product-details h2 {
+  font-family: Georgia, "Times New Roman", serif;
+  font-weight: 500;
+  letter-spacing: -0.02em;
+}
+
+.catalog-cart-shortcut {
+  color: #655650;
+  font-size: 13px;
+  font-weight: 600;
+  transition: border-color 180ms ease, color 180ms ease;
+}
+
+.catalog-cart-shortcut:not(:disabled):hover {
+  border-color: var(--clay-dark);
+  color: var(--clay-dark);
+}
+
+.catalog-empty-cart {
+  border: 1px dashed #ddc9bd;
+  border-radius: 12px;
+  background: #fcf8f5;
+  padding: 28px 20px;
+  text-align: center;
+  color: var(--muted);
 }
 
 .catalog-price {
@@ -718,32 +813,6 @@ textarea:focus-visible {
   .announcement-bar {
     font-size: 8px;
     letter-spacing: 0.15em;
-  }
-
-  @media (min-width: 768px) and (max-width: 1150px) {
-    .store-header > div {
-      gap: 12px;
-      padding-right: 18px;
-      padding-left: 18px;
-    }
-
-    .store-nav {
-      gap: 11px;
-      font-size: 11px;
-    }
-
-    .store-nav .track-link {
-      padding: 9px 11px;
-    }
-
-    .store-bag-link {
-      display: none;
-    }
-
-    .language-toggle {
-      padding: 8px 10px;
-      white-space: nowrap;
-    }
   }
 
   .store-header > div {
@@ -833,6 +902,50 @@ textarea:focus-visible {
   .catalog-page,
   .tracking-page {
     padding-top: 44px;
+  }
+
+  .catalog-topbar {
+    margin-bottom: 40px;
+  }
+
+  .catalog-topbar-link {
+    min-height: 38px;
+    padding: 0 11px;
+    font-size: 11px;
+  }
+
+  .tracking-topbar {
+    margin-bottom: 46px;
+  }
+
+  .catalog-cart {
+    padding: 18px;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1150px) {
+  .store-header > div {
+    gap: 12px;
+    padding-right: 18px;
+    padding-left: 18px;
+  }
+
+  .store-nav {
+    gap: 11px;
+    font-size: 11px;
+  }
+
+  .store-nav .track-link {
+    padding: 9px 11px;
+  }
+
+  .store-bag-link {
+    display: none;
+  }
+
+  .language-toggle {
+    padding: 8px 10px;
+    white-space: nowrap;
   }
 }
 

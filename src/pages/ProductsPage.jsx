@@ -1,4 +1,4 @@
-import { useSearchParams } from 'react-router-dom'
+import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import {
@@ -7,8 +7,11 @@ import {
   Minus,
   Loader2,
   Eye,
-  X
+  X,
+  MessageCircle,
+  ArrowUpRight,
 } from 'lucide-react'
+
 
 export default function ProductsPage() {
 const [products, setProducts] = useState([])
@@ -17,17 +20,10 @@ const [cart, setCart] = useState([])
 const [loading, setLoading] = useState(true)
 const [loadError, setLoadError] = useState('')
 
-const [searchParams] = useSearchParams()
+const [searchParams, setSearchParams] = useSearchParams()
 const categoryFromUrl = searchParams.get('category')
 const [selectedProduct, setSelectedProduct] = useState(null)
-
-function closePreview() {
-  setSelectedProduct(null)
-}
-
-const [selectedCategory, setSelectedCategory] = useState(
-  categoryFromUrl || 'all'
-)
+const selectedCategory = categoryFromUrl || 'all'
   const [showCheckout, setShowCheckout] = useState(false)
 
   const [customer, setCustomer] = useState({
@@ -100,9 +96,21 @@ const [selectedCategory, setSelectedCategory] = useState(
     }
   }, [])
 
-  useEffect(() => {
-  setSelectedCategory(categoryFromUrl || 'all')
-}, [categoryFromUrl])
+  function selectCategory(categoryId) {
+    const nextSearchParams = new URLSearchParams(searchParams)
+
+    if (categoryId === 'all') {
+      nextSearchParams.delete('category')
+    } else {
+      nextSearchParams.set('category', categoryId)
+    }
+
+    setSearchParams(nextSearchParams)
+  }
+
+  function closePreview() {
+    setSelectedProduct(null)
+  }
 
   function addToCart(product) {
     setCart(current => {
@@ -187,10 +195,40 @@ async function submitOrder(e) {
   setShowCheckout(false)
 }
 
+const contactAboutProduct = (product) => {
+  const phone = '94707937390'
+
+  const message = `Hello Aradhana Invitation!
+
+I am interested in this product:
+
+Product: ${product.name_en}
+Price: LKR ${Number(product.price).toLocaleString()}
+
+Please provide more details.`
+
+  const url = `https://wa.me/${phone}?text=${encodeURIComponent(message)}`
+
+  window.open(url, '_blank')
+}
+
 
   return (
     <div className="catalog-page min-h-screen px-5 py-12">
       <div className="mx-auto max-w-7xl">
+
+        <div className="catalog-topbar">
+          <Link to="/" className="catalog-brand" aria-label="Aradhana Invitation home">
+            <span>ARADHANA</span>
+            <small>INVITATION</small>
+          </Link>
+          <div className="catalog-topbar-links">
+            <Link to="/" className="catalog-topbar-link">Home</Link>
+            <Link to="/track-order" className="catalog-topbar-link">
+              Track an order <ArrowUpRight size={15} />
+            </Link>
+          </div>
+        </div>
 
         <div className="mb-10 text-center">
           <p className="mb-3 text-xs font-semibold uppercase tracking-[0.3em] text-[#a77b6e]">
@@ -206,7 +244,7 @@ async function submitOrder(e) {
 
         <div className="mb-8 flex flex-wrap justify-center gap-3">
           <button
-            onClick={() => setSelectedCategory('all')}
+            onClick={() => selectCategory('all')}
             className={`catalog-filter rounded-full px-5 py-2.5 ${
               selectedCategory === 'all' ? 'is-selected' : ''
             }`}
@@ -217,7 +255,7 @@ async function submitOrder(e) {
           {categories.map(category => (
             <button
               key={category.id}
-              onClick={() => setSelectedCategory(category.id)}
+              onClick={() => selectCategory(category.id)}
               className={`catalog-filter rounded-full px-5 py-2.5 ${
                 selectedCategory === category.id ? 'is-selected' : ''
               }`}
@@ -228,10 +266,15 @@ async function submitOrder(e) {
         </div>
 
         <div className="mb-6 flex justify-end">
-          <div className="flex items-center gap-2 rounded-full border border-[#eadfd8] bg-[#fffdfa] px-5 py-3 shadow-sm">
+          <button
+            type="button"
+            onClick={() => document.getElementById('shopping-cart')?.scrollIntoView({ behavior: 'smooth' })}
+            disabled={cartCount === 0}
+            className="catalog-cart-shortcut flex items-center gap-2 rounded-full border border-[#eadfd8] bg-[#fffdfa] px-5 py-3 shadow-sm disabled:cursor-not-allowed disabled:opacity-65"
+          >
             <ShoppingCart />
-            <span>{cartCount} items</span>
-          </div>
+            <span>{cartCount} {cartCount === 1 ? 'item' : 'items'}</span>
+          </button>
         </div>
 
         {loading ? (
@@ -259,7 +302,7 @@ async function submitOrder(e) {
                   className="catalog-product-image h-64 w-full object-cover"
                 />
 
-                <div className="p-5">
+                <div className="catalog-product-details p-5">
                   <h2 className="text-xl font-semibold text-gray-800">
                     {product.name_en}
                   </h2>
@@ -291,6 +334,13 @@ async function submitOrder(e) {
       <Plus size={17} />
       Add
     </button>
+    <button
+  onClick={() => contactAboutProduct(product)}
+  className="flex items-center justify-center gap-2 rounded-lg border border-green-500 px-4 py-2 text-sm font-medium text-green-600 transition hover:bg-green-50"
+>
+  <MessageCircle size={18} />
+  WhatsApp Inquiry
+</button>
   </div>
 </div>
                 </div>
@@ -299,14 +349,25 @@ async function submitOrder(e) {
           </div>
         )}
 
-        {cart.length > 0 && (
-          <div className="catalog-cart mt-12">
+        {(
+          <div id="shopping-cart" className="catalog-cart mt-12">
             <h2 className="mb-5 flex items-center gap-2 text-2xl font-bold">
               <ShoppingCart />
               Your Cart
             </h2>
 
-            {cart.map(item => (
+            {cart.length === 0 ? (
+              <div className="catalog-empty-cart">
+                <p>Your cart is waiting for something lovely.</p>
+                <button
+                  type="button"
+                  onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+                  className="mt-4 text-sm font-semibold text-[#76534b] underline underline-offset-4"
+                >
+                  Browse invitations
+                </button>
+              </div>
+            ) : cart.map(item => (
               <div
                 key={item.id}
                 className="flex flex-wrap items-center justify-between gap-4 border-b py-4"
@@ -338,17 +399,21 @@ async function submitOrder(e) {
               </div>
             ))}
 
-            <div className="mt-6 flex justify-between text-xl font-bold">
-              <span>Total</span>
-              <span>LKR {total.toLocaleString()}</span>
-            </div>
+            {cart.length > 0 && (
+              <>
+                <div className="mt-6 flex justify-between text-xl font-bold">
+                  <span>Total</span>
+                  <span>LKR {total.toLocaleString()}</span>
+                </div>
 
-            <button
-              onClick={() => setShowCheckout(true)}
-              className="catalog-action mt-6 w-full py-3"
-            >
-              Proceed to Checkout
-            </button>
+                <button
+                  onClick={() => setShowCheckout(true)}
+                  className="catalog-action mt-6 w-full py-3"
+                >
+                  Proceed to Checkout
+                </button>
+              </>
+            )}
           </div>
         )}
 
@@ -382,6 +447,29 @@ async function submitOrder(e) {
     <p className="mt-2 text-sm text-gray-500">
       Status: {orderResult.status}
     </p>
+
+    
+<a
+  href={`https://wa.me/94707937390?text=${encodeURIComponent(
+    `Hello Aradhana Invitation!
+
+I have successfully placed an order.
+
+My Tracking Number: ${orderResult.order_number}
+
+Customer Name: ${customer.name}
+Total: LKR ${Number(orderResult.total_amount).toLocaleString()}
+
+Please provide me with more details about my order.`
+  )}`}
+  target="_blank"
+  rel="noopener noreferrer"
+  className="mt-5 inline-flex w-full items-center justify-center gap-2 rounded-lg bg-green-500 px-5 py-3 font-semibold text-white transition hover:bg-green-600"
+>
+  <MessageCircle size={20} />
+  Contact Us on WhatsApp
+</a>
+
 
     <button
       onClick={() => {

@@ -1,7 +1,8 @@
 
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
-import { Search, Package, Loader2, CheckCircle, Clock } from 'lucide-react'
+import { Search, Package, Loader2, CheckCircle, Clock, ArrowLeft, ShoppingBag } from 'lucide-react'
 
 export default function TrackOrder() {
   const [orderNumber, setOrderNumber] = useState('')
@@ -101,6 +102,17 @@ export default function TrackOrder() {
     <div className="tracking-page min-h-screen px-5 py-16">
       <div className="mx-auto max-w-2xl">
 
+        <div className="catalog-topbar tracking-topbar">
+          <Link to="/" className="catalog-brand" aria-label="Aradhana Invitation home">
+            <span>ARADHANA</span>
+            <small>INVITATION</small>
+          </Link>
+          <Link to="/products" className="catalog-topbar-link">
+            <ArrowLeft size={15} />
+            <span>Continue shopping</span>
+          </Link>
+        </div>
+
         <div className="mb-10 text-center">
           <div className="admin-login-mark mb-4">
             <Package size={28} className="text-[#76534b]" />
@@ -113,6 +125,10 @@ export default function TrackOrder() {
           <p className="mt-3 text-gray-500">
             Enter your tracking number and phone number to check your order status.
           </p>
+          <div className="mt-5 inline-flex items-center gap-2 rounded-full bg-[#f0e5de] px-4 py-2 text-xs font-medium text-[#76534b]">
+            <ShoppingBag size={14} />
+            Updates refresh automatically while this page is open
+          </div>
         </div>
 
         <form
