@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
 import ProductsPage from './pages/ProductsPage'
+import TrackOrder from './pages/TrackOrder'
 
 import AdminLogin from './pages/AdminLogin'
 import AdminCategories from './pages/AdminCategories'
@@ -75,6 +76,8 @@ function HomePage() {
       collections: 'Collections',
       about: 'About Us',
       contact: 'Contact',
+      trackOrder: 'Track Your Order',
+      shopNow: 'Shop Now',
       heroSmall: 'MAKE EVERY MOMENT SPECIAL',
       heroTitle: 'Beautiful Invitations,',
       heroTitle2: 'Unforgettable Moments.',
@@ -97,6 +100,8 @@ function HomePage() {
       collections: 'නිර්මාණ',
       about: 'අපි ගැන',
       contact: 'සම්බන්ධ වන්න',
+      trackOrder: 'ඔබේ ඇණවුම පරීක්ෂා කරන්න',
+      shopNow: 'නිර්මාණ මිලදී ගන්න',
       heroSmall: 'ඔබේ සෑම මොහොතක්ම විශේෂ කරගන්න',
       heroTitle: 'ලස්සන ආරාධනා,',
       heroTitle2: 'අමතක නොවන මතකයන්.',
@@ -139,12 +144,36 @@ function HomePage() {
             </p>
           </div>
 
-          <nav className="hidden items-center gap-9 md:flex">
-            <a href="#" className="hover:text-[#a77b6e]">{t.home}</a>
-            <a href="#collections" className="hover:text-[#a77b6e]">{t.collections}</a>
-            <a href="#about" className="hover:text-[#a77b6e]">{t.about}</a>
-            <a href="#contact" className="hover:text-[#a77b6e]">{t.contact}</a>
-          </nav>
+          
+<nav className="hidden items-center gap-7 md:flex">
+  <a href="#" className="hover:text-[#a77b6e]">
+    {t.home}
+  </a>
+
+  <a href="#collections" className="hover:text-[#a77b6e]">
+    {t.collections}
+  </a>
+
+  <a href="#about" className="hover:text-[#a77b6e]">
+    {t.about}
+  </a>
+
+  <a href="#contact" className="hover:text-[#a77b6e]">
+    {t.contact}
+  </a>
+
+  <Link to="/products" className="hover:text-[#a77b6e]">
+    {t.shopNow}
+  </Link>
+
+  <Link
+    to="/track-order"
+    className="border border-[#76534b] px-4 py-2 text-sm transition hover:bg-[#76534b] hover:text-white"
+  >
+    {t.trackOrder}
+  </Link>
+</nav>
+
 
           <div className="flex items-center gap-4">
             <button
@@ -167,14 +196,42 @@ function HomePage() {
           </div>
         </div>
 
-        {menuOpen && (
-          <nav className="flex flex-col gap-5 border-t p-6 md:hidden">
-            <a href="#">{t.home}</a>
-            <a href="#collections">{t.collections}</a>
-            <a href="#about">{t.about}</a>
-            <a href="#contact">{t.contact}</a>
-          </nav>
-        )}
+        
+{menuOpen && (
+  <nav className="flex flex-col gap-5 border-t p-6 md:hidden">
+    <a href="#" onClick={() => setMenuOpen(false)}>
+      {t.home}
+    </a>
+
+    <a href="#collections" onClick={() => setMenuOpen(false)}>
+      {t.collections}
+    </a>
+
+    <a href="#about" onClick={() => setMenuOpen(false)}>
+      {t.about}
+    </a>
+
+    <a href="#contact" onClick={() => setMenuOpen(false)}>
+      {t.contact}
+    </a>
+
+    <Link
+      to="/products"
+      onClick={() => setMenuOpen(false)}
+    >
+      {t.shopNow}
+    </Link>
+
+    <Link
+      to="/track-order"
+      onClick={() => setMenuOpen(false)}
+      className="font-semibold text-[#a77b6e]"
+    >
+      {t.trackOrder}
+    </Link>
+  </nav>
+)}
+
       </header>
 
       {/* Hero Section */}
@@ -204,13 +261,25 @@ function HomePage() {
               {t.heroDescription}
             </p>
 
-            <a
-              href="#collections"
-              className="mt-9 inline-flex items-center gap-3 bg-[#b58b79] px-8 py-4 text-sm tracking-wider transition hover:bg-white hover:text-[#76534b]"
-            >
-              {t.explore}
-              <ArrowRight size={17} />
-            </a>
+            
+<div className="mt-9 flex flex-wrap gap-4">
+  <Link
+    to="/products"
+    className="inline-flex items-center gap-3 bg-[#b58b79] px-8 py-4 text-sm tracking-wider transition hover:bg-white hover:text-[#76534b]"
+  >
+    {t.explore}
+    <ArrowRight size={17} />
+  </Link>
+
+  <Link
+    to="/track-order"
+    className="inline-flex items-center gap-3 border border-white px-8 py-4 text-sm tracking-wider transition hover:bg-white hover:text-[#76534b]"
+  >
+    {t.trackOrder}
+    <ShoppingBag size={17} />
+  </Link>
+</div>
+
           </div>
         </div>
       </section>
@@ -254,7 +323,13 @@ function HomePage() {
                   : category.description_en || category.description_si
 
                 return (
-                  <div key={category.id} className="group cursor-pointer">
+                      <Link
+                        key={category.id}
+                        to={`/products?category=${category.id}`}
+                        className="group block cursor-pointer"
+                      >
+                        
+                        
                     <div className="overflow-hidden bg-[#eee3dd]">
                       {category.image_url ? (
                         <img
@@ -278,15 +353,18 @@ function HomePage() {
                       </div>
                       <ChevronRight className="shrink-0 text-[#a77b6e]" />
                     </div>
-                  </div>
+                  </Link>
                 )
               })}
             </div>
 
             <div className="mt-12 text-center">
-              <button className="border border-[#76534b] px-10 py-4 text-xs tracking-[2px] transition hover:bg-[#76534b] hover:text-white">
-                {t.viewAll}
-              </button>
+              <Link
+                to="/products"
+              className="inline-block border border-[#76534b] px-10 py-4 text-xs tracking-[2px] transition hover:bg-[#76534b] hover:text-white"
+              >
+            {t.viewAll}
+            </Link>
             </div>
           </>
         )}
@@ -361,6 +439,8 @@ function App() {
           path="/admin/categories"
           element={<AdminCategories />}
         />
+      
+        <Route path="/track-order" element={<TrackOrder />} />
 
         {/* Admin Product Management */}
         <Route
@@ -374,7 +454,7 @@ function App() {
         />
 
         <Route path="/products" element={<ProductsPage />} />
-        
+
         {/* Unknown URLs */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>

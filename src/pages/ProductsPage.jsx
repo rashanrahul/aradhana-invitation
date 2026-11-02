@@ -1,18 +1,39 @@
-
+import { useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
 import { ShoppingCart, Plus, Minus, Loader2 } from 'lucide-react'
 
 export default function ProductsPage() {
-  const [products, setProducts] = useState([])
-  const [categories, setCategories] = useState([])
-  const [selectedCategory, setSelectedCategory] = useState('all')
-  const [cart, setCart] = useState([])
-  const [loading, setLoading] = useState(true)
+const [products, setProducts] = useState([])
+const [categories, setCategories] = useState([])
+const [cart, setCart] = useState([])
+const [loading, setLoading] = useState(true)
+
+const [searchParams] = useSearchParams()
+const categoryFromUrl = searchParams.get('category')
+
+const [selectedCategory, setSelectedCategory] = useState(
+  categoryFromUrl || 'all'
+)
+  const [showCheckout, setShowCheckout] = useState(false)
+
+  const [customer, setCustomer] = useState({
+  name: '',
+  phone: '',
+  email: ''
+  })
+
+  const [submitting, setSubmitting] = useState(false)
+  const [orderResult, setOrderResult] = useState(null)
+  const [orderError, setOrderError] = useState('')
 
   useEffect(() => {
     fetchData()
   }, [])
+
+  useEffect(() => {
+  setSelectedCategory(categoryFromUrl || 'all')
+}, [categoryFromUrl])
 
   async function fetchData() {
     setLoading(true)
@@ -90,6 +111,45 @@ export default function ProductsPage() {
     (sum, item) => sum + item.quantity,
     0
   )
+
+  
+async function submitOrder(e) {
+  e.preventDefault()
+
+  if (cart.length === 0) {
+    setOrderError('Your cart is empty.')
+    return
+  }
+
+  setSubmitting(true)
+  setOrderError('')
+
+  const { data, error } = await supabase.rpc(
+    'place_customer_order',
+    {
+      p_customer_name: customer.name,
+      p_customer_phone: customer.phone,
+      p_customer_email: customer.email || null,
+      p_items: cart.map(item => ({
+        product_id: item.id,
+        quantity: item.quantity
+      }))
+    }
+  )
+
+  setSubmitting(false)
+
+  if (error) {
+    console.error(error)
+    setOrderError(error.message || 'Unable to submit your order.')
+    return
+  }
+
+  setOrderResult(data)
+  setCart([])
+  setShowCheckout(false)
+}
+
 
   return (
     <div className="min-h-screen bg-[#fffaf7] px-5 py-12">
@@ -232,13 +292,129 @@ export default function ProductsPage() {
             </div>
 
             <button
-              onClick={() => alert('Checkout page will be connected next.')}
+              onClick={() => setShowCheckout(true)}
               className="mt-6 w-full rounded-full bg-rose-600 py-3 font-semibold text-white hover:bg-rose-700"
             >
               Proceed to Checkout
             </button>
           </div>
         )}
+
+        
+{orderResult ? (
+  <div className="mx-auto mt-10 max-w-xl rounded-2xl bg-white p-8 text-center shadow-lg">
+    <div className="mb-4 text-5xl">🎉</div>
+
+    <h2 className="text-2xl font-bold text-gray-800">
+      Order Submitted Successfully!
+    </h2>
+
+    <p className="mt-3 text-gray-500">
+      Thank you! Your order has been received.
+    </p>
+
+    <div className="my-6 rounded-xl bg-rose-50 p-5">
+      <p className="text-sm text-gray-600">
+        Your Tracking Number
+      </p>
+
+      <p className="mt-2 break-all text-2xl font-bold text-rose-600">
+        {orderResult.order_number}
+      </p>
+    </div>
+
+    <p className="font-semibold">
+      Total: LKR {Number(orderResult.total_amount).toLocaleString()}
+    </p>
+
+    <p className="mt-2 text-sm text-gray-500">
+      Status: {orderResult.status}
+    </p>
+
+    <button
+      onClick={() => {
+        setOrderResult(null)
+        setCustomer({ name: '', phone: '', email: '' })
+      }}
+      className="mt-6 rounded-full bg-rose-600 px-7 py-3 text-white"
+    >
+      Continue Shopping
+    </button>
+  </div>
+) : showCheckout ? (
+  <div className="mx-auto mt-10 max-w-xl rounded-2xl bg-white p-7 shadow-lg">
+    <h2 className="mb-2 text-2xl font-bold">
+      Customer Details
+    </h2>
+
+    <p className="mb-6 text-sm text-gray-500">
+      Enter your details to submit your order. No payment is required.
+    </p>
+
+    <form onSubmit={submitOrder} className="space-y-4">
+      <input
+        type="text"
+        placeholder="Full Name"
+        required
+        minLength={2}
+        maxLength={100}
+        value={customer.name}
+        onChange={e => setCustomer({ ...customer, name: e.target.value })}
+        className="w-full rounded-lg border p-3"
+      />
+
+      <input
+        type="tel"
+        placeholder="Phone Number"
+        required
+        minLength={7}
+        maxLength={20}
+        value={customer.phone}
+        onChange={e => setCustomer({ ...customer, phone: e.target.value })}
+        className="w-full rounded-lg border p-3"
+      />
+
+      <input
+        type="email"
+        placeholder="Email Address (Optional)"
+        maxLength={254}
+        value={customer.email}
+        onChange={e => setCustomer({ ...customer, email: e.target.value })}
+        className="w-full rounded-lg border p-3"
+      />
+
+      <div className="rounded-lg bg-gray-50 p-4">
+        <p className="font-semibold">
+          Order Total: LKR {total.toLocaleString()}
+        </p>
+        <p className="mt-1 text-sm text-gray-500">
+          No online payment is required.
+        </p>
+      </div>
+
+      {orderError && (
+        <p className="text-sm text-red-600">{orderError}</p>
+      )}
+
+      <button
+        type="submit"
+        disabled={submitting}
+        className="w-full rounded-full bg-rose-600 py-3 font-semibold text-white disabled:opacity-50"
+      >
+        {submitting ? 'Submitting...' : 'Submit Order'}
+      </button>
+
+      <button
+        type="button"
+        onClick={() => setShowCheckout(false)}
+        className="w-full rounded-full border py-3"
+      >
+        Back to Cart
+      </button>
+    </form>
+  </div>
+) : null}
+
 
       </div>
     </div>
