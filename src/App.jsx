@@ -1,6 +1,9 @@
 import { useState, useEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
+import AdminProducts from './pages/AdminProducts'
+import AdminOrders from './pages/AdminOrders'
+import ProductsPage from './pages/ProductsPage'
 
 import AdminLogin from './pages/AdminLogin'
 import AdminCategories from './pages/AdminCategories'
@@ -18,22 +21,53 @@ function HomePage() {
 
   const [language, setLanguage] = useState('EN')
   const [menuOpen, setMenuOpen] = useState(false)
+  const [categories, setCategories] = useState([])
+  const [categoriesLoading, setCategoriesLoading] = useState(true)
+  const [categoriesError, setCategoriesError] = useState('')
+
   useEffect(() => {
-  async function testConnection() {
-    const { data, error } = await supabase
-      .from('categories')
-      .select('id')
-      .limit(1)
+    let mounted = true
 
-    if (error) {
-      console.error('Supabase Error:', error.message)
-    } else {
-      console.log('Supabase Connected Successfully!', data)
+    async function fetchCategories() {
+      const { data, error } = await supabase
+        .from('categories')
+        .select('id, name_en, name_si, description_en, description_si, image_url')
+        .eq('is_active', true)
+        .order('created_at', { ascending: true })
+
+      if (!mounted) return
+
+      if (error) {
+        setCategoriesError(`Unable to load categories: ${error.message}`)
+        console.error('Failed to load customer categories:', error.message)
+      } else {
+        setCategories(data || [])
+        setCategoriesError('')
+      }
+
+      setCategoriesLoading(false)
     }
-  }
 
-  testConnection()
-}, [])
+    fetchCategories()
+
+    const channel = supabase
+      .channel('customer-categories')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'categories' },
+        fetchCategories,
+      )
+      .subscribe((status) => {
+        if (status === 'CHANNEL_ERROR' || status === 'TIMED_OUT') {
+          console.error(`Category live updates failed: ${status}`)
+        }
+      })
+
+    return () => {
+      mounted = false
+      supabase.removeChannel(channel)
+    }
+  }, [])
 
   const content = {
     EN: {
@@ -83,25 +117,6 @@ function HomePage() {
   }
 
   const t = content[language]
-
-  const categories = [
-    {
-      title: t.wedding,
-      image: 'https://images.unsplash.com/photo-1519741497674-611481863552?w=700',
-    },
-    {
-      title: t.birthday,
-      image: 'https://images.unsplash.com/photo-1530103862676-de8c9debad1d?w=700',
-    },
-    {
-      title: t.engagement,
-      image: 'https://images.unsplash.com/photo-1511285560929-80b456fea0bc?w=700',
-    },
-    {
-      title: t.corporate,
-      image: 'https://images.unsplash.com/photo-1511795409834-ef04bbd61622?w=700',
-    }
-  ]
 
   return (
     <div className="min-h-screen bg-[#fffaf7] text-[#42332f]">
@@ -215,30 +230,66 @@ function HomePage() {
           <div className="mx-auto mt-5 h-px w-20 bg-[#b58b79]" />
         </div>
 
-        <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4">
-          {categories.map((category, index) => (
-            <div key={index} className="group cursor-pointer">
-              <div className="overflow-hidden bg-[#eee3dd]">
-                <img
-                  src={category.image}
-                  alt={category.title}
-                  className="h-[330px] w-full object-cover transition duration-700 group-hover:scale-110"
-                />
-              </div>
+        {categoriesLoading ? (
+          <p className="text-center text-[#786660]" role="status">
+            Loading collections...
+          </p>
+        ) : categoriesError ? (
+          <p className="text-center text-[#a33]" role="alert">
+            {categoriesError}
+          </p>
+        ) : categories.length === 0 ? (
+          <p className="text-center text-[#786660]">
+            No collections are available right now.
+          </p>
+        ) : (
+          <>
+            <div className="grid grid-cols-1 gap-7 sm:grid-cols-2 lg:grid-cols-4">
+              {categories.map((category) => {
+                const title = language === 'SI'
+                  ? category.name_si || category.name_en
+                  : category.name_en || category.name_si
+                const description = language === 'SI'
+                  ? category.description_si || category.description_en
+                  : category.description_en || category.description_si
 
-              <div className="flex items-center justify-between py-5">
-                <h3 className="font-serif text-xl">{category.title}</h3>
-                <ChevronRight className="text-[#a77b6e]" />
-              </div>
+                return (
+                  <div key={category.id} className="group cursor-pointer">
+                    <div className="overflow-hidden bg-[#eee3dd]">
+                      {category.image_url ? (
+                        <img
+                          src={category.image_url}
+                          alt={title}
+                          className="h-[330px] w-full object-cover transition duration-700 group-hover:scale-110"
+                        />
+                      ) : (
+                        <div className="flex h-[330px] items-center justify-center px-6 text-center font-serif text-xl text-[#76534b]">
+                          {title}
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex items-center justify-between py-5">
+                      <div>
+                        <h3 className="font-serif text-xl">{title}</h3>
+                        {description && (
+                          <p className="mt-2 text-sm text-[#786660]">{description}</p>
+                        )}
+                      </div>
+                      <ChevronRight className="shrink-0 text-[#a77b6e]" />
+                    </div>
+                  </div>
+                )
+              })}
             </div>
-          ))}
-        </div>
 
-        <div className="mt-12 text-center">
-          <button className="border border-[#76534b] px-10 py-4 text-xs tracking-[2px] transition hover:bg-[#76534b] hover:text-white">
-            {t.viewAll}
-          </button>
-        </div>
+            <div className="mt-12 text-center">
+              <button className="border border-[#76534b] px-10 py-4 text-xs tracking-[2px] transition hover:bg-[#76534b] hover:text-white">
+                {t.viewAll}
+              </button>
+            </div>
+          </>
+        )}
       </section>
 
       {/* About */}
@@ -311,6 +362,19 @@ function App() {
           element={<AdminCategories />}
         />
 
+        {/* Admin Product Management */}
+        <Route
+          path="/admin/products"
+          element={<AdminProducts />}
+        />
+
+        <Route
+          path="/admin/orders"
+          element={<AdminOrders />}
+        />
+
+        <Route path="/products" element={<ProductsPage />} />
+        
         {/* Unknown URLs */}
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
