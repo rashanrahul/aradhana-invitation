@@ -73,13 +73,37 @@ textarea:focus-visible {
   line-height: 1;
 }
 
-.store-brand h1 {
+.store-brand-logo-frame {
+  display: grid;
+  width: 102px;
+  height: 60px;
+  flex: 0 0 auto;
+  place-items: center;
+  border: 1px solid #e8dfd3;
+  border-radius: 12px;
+  background: #fffdf8;
+  box-shadow: 0 5px 16px rgb(65 45 38 / 7%);
+  transition: transform 180ms ease, box-shadow 180ms ease;
+}
+
+.store-brand:hover .store-brand-logo-frame {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 20px rgb(65 45 38 / 10%);
+}
+
+.store-brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.store-brand-wordmark {
   font-family: Georgia, "Times New Roman", serif;
   font-size: 24px;
   letter-spacing: 0.18em;
 }
 
-.store-brand p {
+.store-brand-subtitle {
   margin-top: 6px;
   letter-spacing: 0.38em;
 }
@@ -310,6 +334,35 @@ textarea:focus-visible {
   background: #493832;
 }
 
+.store-footer-brand {
+  display: inline-flex;
+  border-radius: 18px;
+  transition: transform 180ms ease;
+}
+
+.store-footer-brand:hover {
+  transform: translateY(-2px);
+}
+
+.store-footer-logo-frame {
+  display: grid;
+  width: 174px;
+  height: 98px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 28%);
+  border-radius: 16px;
+  background: #f7f3e9;
+  padding: 5px;
+  box-shadow: 0 12px 30px rgb(0 0 0 / 16%);
+}
+
+.store-footer-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .admin-login {
   position: relative;
   isolation: isolate;
@@ -362,6 +415,26 @@ textarea:focus-visible {
   color: var(--clay-dark);
 }
 
+.admin-login-logo-frame {
+  display: grid;
+  width: 176px;
+  height: 100px;
+  margin: 0 auto 20px;
+  place-items: center;
+  overflow: hidden;
+  border: 1px solid #e8dfd3;
+  border-radius: 16px;
+  background: #f7f3e9;
+  padding: 5px;
+  box-shadow: 0 8px 24px rgb(65 45 38 / 9%);
+}
+
+.admin-login-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .admin-login-title,
 .admin-display {
   font-family: Georgia, "Times New Roman", serif;
@@ -405,20 +478,38 @@ textarea:focus-visible {
 
 .admin-brand {
   display: flex;
+  flex-direction: column;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   padding: 8px 10px 24px;
+  text-align: center;
 }
 
-.admin-brand-mark {
+.admin-brand-logo-frame {
   display: grid;
-  width: 42px;
-  height: 42px;
-  flex: 0 0 auto;
+  width: 100%;
+  max-width: 184px;
+  height: 104px;
   place-items: center;
-  border: 1px solid rgb(255 255 255 / 18%);
-  border-radius: 13px;
-  background: rgb(255 255 255 / 8%);
+  overflow: hidden;
+  border: 1px solid rgb(255 255 255 / 34%);
+  border-radius: 15px;
+  background: #f7f3e9;
+  padding: 5px;
+  box-shadow: 0 10px 24px rgb(0 0 0 / 16%);
+}
+
+.admin-brand-logo {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.admin-brand-caption {
+  color: rgb(255 255 255 / 70%);
+  font-size: 9px;
+  font-weight: 600;
+  letter-spacing: 0.27em;
 }
 
 .admin-sidebar nav {
@@ -821,6 +912,34 @@ textarea:focus-visible {
     padding-left: 18px;
   }
 
+  .store-brand {
+    gap: 8px;
+  }
+
+  .store-brand-logo-frame {
+    width: 64px;
+    height: 42px;
+    border-radius: 9px;
+  }
+
+  .store-brand-wordmark {
+    font-size: 16px;
+    letter-spacing: 0.12em;
+  }
+
+  .store-brand-subtitle {
+    font-size: 7px;
+    letter-spacing: 0.18em;
+  }
+
+  .store-header-actions {
+    gap: 8px;
+  }
+
+  .language-toggle {
+    padding: 7px 10px;
+  }
+
   .store-hero {
     min-height: 620px;
     min-height: min(720px, 82svh);
@@ -928,6 +1047,15 @@ textarea:focus-visible {
     gap: 12px;
     padding-right: 18px;
     padding-left: 18px;
+  }
+
+  .store-brand-logo-frame {
+    width: 86px;
+    height: 52px;
+  }
+
+  .store-brand-wordmark {
+    font-size: 21px;
   }
 
   .store-nav {

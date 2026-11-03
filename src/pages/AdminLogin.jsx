@@ -2,7 +2,7 @@
 import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
-import { ArrowLeft, KeyRound, Sparkles } from 'lucide-react'
+import { ArrowLeft, KeyRound } from 'lucide-react'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -50,7 +50,9 @@ export default function AdminLogin() {
       <div className="admin-login-card w-full max-w-md p-8 md:p-10">
 
         <div className="text-center mb-8">
-          <div className="admin-login-mark"><Sparkles size={25} /></div>
+          <div className="admin-login-logo-frame">
+            <img src="/logo.png" alt="Aradhana Invitation" className="admin-login-logo" />
+          </div>
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a77b6e]">
             Welcome back
           </p>

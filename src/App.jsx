@@ -137,15 +137,23 @@ function HomePage() {
       <header className="store-header sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
 
-          <div className="store-brand">
-            <h1 className="text-2xl font-serif font-bold tracking-[3px] text-[#76534b]">
-              ARADHANA
-            </h1>
-            <p className="text-center text-[9px] tracking-[5px]">
-              INVITATION
-            </p>
-          </div>
-
+          <Link to="/" className="store-brand flex items-center gap-3" aria-label="Aradhana Invitation home">
+            <span className="store-brand-logo-frame">
+              <img
+                src="/logo.png"
+                alt=""
+                className="store-brand-logo"
+              />
+            </span>
+            <span>
+              <span className="store-brand-wordmark block font-serif font-bold text-[#76534b]">
+                ARADHANA
+              </span>
+              <span className="store-brand-subtitle mt-1 block text-[10px] text-[#76534b]">
+                INVITATION
+              </span>
+            </span>
+          </Link>
           
 <nav className="store-nav hidden items-center gap-7 md:flex">
   <a href="#" className="hover:text-[#a77b6e]">
@@ -177,7 +185,7 @@ function HomePage() {
 </nav>
 
 
-          <div className="flex items-center gap-4">
+          <div className="store-header-actions flex items-center gap-4">
             <button
               onClick={() => setLanguage(language === 'EN' ? 'SI' : 'EN')}
               className="language-toggle border border-[#76534b] text-xs tracking-wider hover:bg-[#76534b] hover:text-white"
@@ -413,15 +421,15 @@ function HomePage() {
 
       {/* Footer */}
       <footer id="contact" className="store-footer px-6 py-14 text-center text-white">
-        <h2 className="font-serif text-3xl tracking-[4px]">ARADHANA</h2>
-        <p className="mt-2 text-xs tracking-[5px]">INVITATION</p>
+        <Link to="/" className="store-footer-brand" aria-label="Aradhana Invitation home">
+          <span className="store-footer-logo-frame">
+            <img src="/logo.png" alt="Aradhana Invitation" className="store-footer-logo" />
+          </span>
+        </Link>
 
-        <p className="mt-7 text-sm text-white/70">
+        <p className="mt-6 text-sm text-white/70">
           Beautiful Invitations for Your Special Moments.
         </p>
-
-        <div className="mt-8 flex justify-center gap-6">
-        </div>
 
         <div className="mt-12 border-t border-white/20 pt-7 text-xs text-white/50">
           © {new Date().getFullYear()} Aradhana Invitation. All Rights Reserved.

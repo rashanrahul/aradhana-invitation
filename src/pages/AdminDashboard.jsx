@@ -7,7 +7,6 @@ import {
   Store,
   LogOut,
   LoaderCircle,
-  Sparkles,
 } from 'lucide-react'
 import {
   Link,
@@ -185,12 +184,11 @@ export default function AdminDashboard() {
   return (
     <div className="admin-shell min-h-screen md:flex">
       <aside className="admin-sidebar p-5 text-white md:min-h-screen md:w-64 md:shrink-0">
-        <Link to="/admin/dashboard" className="admin-brand">
-          <span className="admin-brand-mark"><Sparkles size={19} /></span>
-          <span>
-            <span className="block font-serif text-lg tracking-[0.12em]">ARADHANA</span>
-            <span className="mt-1 block text-[9px] tracking-[0.27em] text-white/65">STUDIO ADMIN</span>
+        <Link to="/admin/dashboard" className="admin-brand" aria-label="Aradhana Invitation admin dashboard">
+          <span className="admin-brand-logo-frame">
+            <img src="/logo.png" alt="" className="admin-brand-logo" />
           </span>
+          <span className="admin-brand-caption">STUDIO ADMIN</span>
         </Link>
 
         <nav className="mt-8 flex gap-2 overflow-x-auto md:flex-col" aria-label="Admin dashboard">
