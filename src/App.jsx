@@ -6,6 +6,7 @@ import AdminOrders from './pages/AdminOrders'
 import ProductsPage from './pages/ProductsPage'
 import TrackOrder from './pages/TrackOrder'
 import WhatsAppButton from './components/WhatsAppButton'
+import BrandFooter from './components/BrandFooter'
 
 import AdminLogin from './pages/AdminLogin'
 import AdminCategories from './pages/AdminCategories'
@@ -420,21 +421,9 @@ function HomePage() {
       </section>
 
       {/* Footer */}
-      <footer id="contact" className="store-footer px-6 py-14 text-center text-white">
-        <Link to="/" className="store-footer-brand" aria-label="Aradhana Invitation home">
-          <span className="store-footer-logo-frame">
-            <img src="/logo.png" alt="Aradhana Invitation" className="store-footer-logo" />
-          </span>
-        </Link>
-
-        <p className="mt-6 text-sm text-white/70">
-          Beautiful Invitations for Your Special Moments.
-        </p>
-
-        <div className="mt-12 border-t border-white/20 pt-7 text-xs text-white/50">
-          © {new Date().getFullYear()} Aradhana Invitation. All Rights Reserved.
-        </div>
-      </footer>
+      <div id="contact">
+        <BrandFooter />
+      </div>
 
     </div>
   )

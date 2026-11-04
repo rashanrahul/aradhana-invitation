@@ -3,6 +3,7 @@ import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
 import { ArrowLeft, KeyRound } from 'lucide-react'
+import BrandFooter from '../components/BrandFooter'
 
 export default function AdminLogin() {
   const navigate = useNavigate()
@@ -46,8 +47,22 @@ export default function AdminLogin() {
   }
 
   return (
-    <div className="admin-login min-h-screen flex items-center justify-center p-5">
-      <div className="admin-login-card w-full max-w-md p-8 md:p-10">
+    <div className="admin-login min-h-screen flex flex-col p-5">
+      <header className="admin-login-nav">
+        <Link to="/" className="admin-login-nav-brand" aria-label="Aradhana Invitation home">
+          <span className="admin-login-nav-logo-frame">
+            <img src="/logo.png" alt="" />
+          </span>
+          <span>
+            <strong>ARADHANA</strong>
+            <small>INVITATION</small>
+          </span>
+        </Link>
+        <Link to="/" className="admin-login-nav-link">View storefront</Link>
+      </header>
+
+      <main className="admin-login-content flex flex-1 items-center justify-center">
+        <div className="admin-login-card w-full max-w-md p-8 md:p-10">
 
         <div className="text-center mb-8">
           <div className="admin-login-logo-frame">
@@ -119,7 +134,9 @@ export default function AdminLogin() {
             <ArrowLeft size={14} /> Storefront
           </Link>
         </div>
-      </div>
+        </div>
+      </main>
+      <BrandFooter />
     </div>
   )
 }

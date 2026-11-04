@@ -1,6 +1,7 @@
 import { Link, useSearchParams } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 import { supabase } from '../lib/supabaseClient'
+import BrandFooter from '../components/BrandFooter'
 import {
   ShoppingCart,
   Plus,
@@ -214,13 +215,18 @@ Please provide more details.`
 
 
   return (
-    <div className="catalog-page min-h-screen px-5 py-12">
-      <div className="mx-auto max-w-7xl">
+    <div className="catalog-page min-h-screen">
+      <div className="mx-auto max-w-7xl px-5">
 
         <div className="catalog-topbar">
           <Link to="/" className="catalog-brand" aria-label="Aradhana Invitation home">
-            <span>ARADHANA</span>
-            <small>INVITATION</small>
+            <span className="catalog-brand-logo-frame">
+              <img src="/logo.png" alt="" className="catalog-brand-logo" />
+            </span>
+            <span className="catalog-brand-wordmark">
+              <strong>ARADHANA</strong>
+              <small>INVITATION</small>
+            </span>
           </Link>
           <div className="catalog-topbar-links">
             <Link to="/" className="catalog-topbar-link">Home</Link>
@@ -593,6 +599,7 @@ Please provide me with more details about my order.`
 )}
 
       </div>
+      <BrandFooter />
     </div>
   )
 }

@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import BrandFooter from '../components/BrandFooter'
 import { Search, Package, Loader2, CheckCircle, Clock, ArrowLeft, ShoppingBag } from 'lucide-react'
 
 export default function TrackOrder() {
@@ -99,13 +100,18 @@ export default function TrackOrder() {
   const isCancelled = order?.status === 'Cancelled'
 
   return (
-    <div className="tracking-page min-h-screen px-5 py-16">
-      <div className="mx-auto max-w-2xl">
+    <div className="tracking-page min-h-screen">
+      <div className="mx-auto max-w-2xl px-5">
 
         <div className="catalog-topbar tracking-topbar">
           <Link to="/" className="catalog-brand" aria-label="Aradhana Invitation home">
-            <span>ARADHANA</span>
-            <small>INVITATION</small>
+            <span className="catalog-brand-logo-frame">
+              <img src="/logo.png" alt="" className="catalog-brand-logo" />
+            </span>
+            <span className="catalog-brand-wordmark">
+              <strong>ARADHANA</strong>
+              <small>INVITATION</small>
+            </span>
           </Link>
           <Link to="/products" className="catalog-topbar-link">
             <ArrowLeft size={15} />
@@ -297,6 +303,7 @@ export default function TrackOrder() {
           </div>
         )}
       </div>
+      <BrandFooter />
     </div>
   )
 }

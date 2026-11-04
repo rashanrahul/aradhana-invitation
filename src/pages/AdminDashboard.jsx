@@ -17,6 +17,7 @@ import {
   useNavigate,
 } from 'react-router-dom'
 import { supabase } from '../lib/supabaseClient'
+import BrandFooter from '../components/BrandFooter'
 
 const navigation = [
   { to: '/admin/dashboard', label: 'Overview', icon: LayoutDashboard, end: true },
@@ -233,6 +234,7 @@ export default function AdminDashboard() {
           </Link>
         </header>
         <Outlet />
+        <BrandFooter />
       </main>
     </div>
   )
