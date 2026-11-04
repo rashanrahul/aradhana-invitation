@@ -11,6 +11,7 @@ import {
   X,
   MessageCircle,
   ArrowUpRight,
+  Search,
 } from 'lucide-react'
 
 
@@ -18,6 +19,7 @@ export default function ProductsPage() {
 const [products, setProducts] = useState([])
 const [categories, setCategories] = useState([])
 const [cart, setCart] = useState([])
+const [searchQuery, setSearchQuery] = useState('')
 const [loading, setLoading] = useState(true)
 const [loadError, setLoadError] = useState('')
 
@@ -141,12 +143,19 @@ const selectedCategory = categoryFromUrl || 'all'
     )
   }
 
+  const normalizedQuery = searchQuery.trim().toLocaleLowerCase()
   const filteredProducts =
-    selectedCategory === 'all'
-      ? products
-      : products.filter(
-          product => product.category_id === selectedCategory
-        )
+    products.filter(product => {
+      const matchesCategory =
+        selectedCategory === 'all' || product.category_id === selectedCategory
+      const matchesSearch =
+        !normalizedQuery ||
+        [product.name_en, product.name_si, product.description_en, product.description_si]
+          .filter(Boolean)
+          .some(value => value.toLocaleLowerCase().includes(normalizedQuery))
+
+      return matchesCategory && matchesSearch
+    })
 
   const total = cart.reduce(
     (sum, item) => sum + Number(item.price) * item.quantity,
@@ -248,9 +257,22 @@ Please provide more details.`
           </p>
         </div>
 
-        <div className="mb-8 flex flex-wrap justify-center gap-3">
+        <div className="catalog-tools mb-8">
+          <label className="catalog-search">
+            <Search size={18} aria-hidden="true" />
+            <input
+              type="search"
+              value={searchQuery}
+              onChange={event => setSearchQuery(event.target.value)}
+              placeholder="Search invitations..."
+              aria-label="Search invitations"
+            />
+          </label>
+
+          <div className="catalog-category-filters flex flex-wrap justify-center gap-3">
           <button
             onClick={() => selectCategory('all')}
+            aria-pressed={selectedCategory === 'all'}
             className={`catalog-filter rounded-full px-5 py-2.5 ${
               selectedCategory === 'all' ? 'is-selected' : ''
             }`}
@@ -262,6 +284,7 @@ Please provide more details.`
             <button
               key={category.id}
               onClick={() => selectCategory(category.id)}
+              aria-pressed={selectedCategory === category.id}
               className={`catalog-filter rounded-full px-5 py-2.5 ${
                 selectedCategory === category.id ? 'is-selected' : ''
               }`}
@@ -269,6 +292,7 @@ Please provide more details.`
               {category.name_en}
             </button>
           ))}
+          </div>
         </div>
 
         <div className="mb-6 flex justify-end">
@@ -293,7 +317,9 @@ Please provide more details.`
           </p>
         ) : filteredProducts.length === 0 ? (
           <p className="py-20 text-center text-gray-500">
-            No products available yet.
+            {searchQuery || selectedCategory !== 'all'
+              ? 'No invitations match those filters. Try another search or category.'
+              : 'No products available yet.'}
           </p>
         ) : (
           <div className="grid gap-7 sm:grid-cols-2 lg:grid-cols-3">

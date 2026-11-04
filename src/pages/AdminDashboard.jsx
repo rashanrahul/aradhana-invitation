@@ -4,6 +4,7 @@ import {
   Tags,
   Package,
   ClipboardList,
+  MessageSquare,
   Store,
   LogOut,
   LoaderCircle,
@@ -24,6 +25,7 @@ const navigation = [
   { to: '/admin/dashboard/categories', label: 'Categories', icon: Tags },
   { to: '/admin/dashboard/products', label: 'Products', icon: Package },
   { to: '/admin/dashboard/orders', label: 'Orders', icon: ClipboardList },
+  { to: '/admin/dashboard/feedback', label: 'Customer Feedback', icon: MessageSquare },
 ]
 
 function DashboardOverview() {

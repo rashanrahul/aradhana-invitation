@@ -6,6 +6,9 @@ import AdminOrders from './pages/AdminOrders'
 import ProductsPage from './pages/ProductsPage'
 import TrackOrder from './pages/TrackOrder'
 import WhatsAppButton from './components/WhatsAppButton'
+import FeedbackPage from './pages/FeedbackPage'
+import AdminFeedback from './pages/AdminFeedback'
+import CustomerFeedbackSection from './components/CustomerFeedbackSection'
 import BrandFooter from './components/BrandFooter'
 
 import AdminLogin from './pages/AdminLogin'
@@ -177,12 +180,19 @@ function HomePage() {
     {t.shopNow}
   </Link>
 
+  <Link to="/feedback" className="hover:text-[#76534b]">
+  Customer Feedback
+</Link>
+
   <Link
     to="/track-order"
     className="track-link border border-[#76534b] transition hover:bg-[#76534b] hover:text-white"
   >
     {t.trackOrder}
   </Link>
+
+  
+
 </nav>
 
 
@@ -237,6 +247,13 @@ function HomePage() {
       onClick={() => setMenuOpen(false)}
     >
       {t.shopNow}
+    </Link>
+
+    <Link
+      to="/feedback"
+      onClick={() => setMenuOpen(false)}
+    >
+      Customer Feedback
     </Link>
 
     <Link
@@ -385,7 +402,10 @@ function HomePage() {
             </div>
           </>
         )}
-      </section>
+            </section>
+
+      {/* Customer Feedback */}
+      <CustomerFeedbackSection />
 
       {/* About */}
       <section id="about" className="about-section">
@@ -419,7 +439,7 @@ function HomePage() {
           </div>
         </div>
       </section>
-
+     
       {/* Footer */}
       <div id="contact">
         <BrandFooter />
@@ -441,11 +461,12 @@ function App() {
 
         {/* Secured admin dashboard and management sections */}
         <Route path="/admin/dashboard" element={<AdminDashboard />}>
-          <Route index element={<DashboardOverview />} />
-          <Route path="categories" element={<AdminCategories />} />
-          <Route path="products" element={<AdminProducts />} />
-          <Route path="orders" element={<AdminOrders />} />
-        </Route>
+  <Route index element={<DashboardOverview />} />
+  <Route path="categories" element={<AdminCategories />} />
+  <Route path="products" element={<AdminProducts />} />
+  <Route path="orders" element={<AdminOrders />} />
+  <Route path="feedback" element={<AdminFeedback />} />
+</Route>
 
         <Route
           path="/admin/categories"
@@ -463,6 +484,13 @@ function App() {
         <Route path="/track-order" element={<TrackOrder />} />
 
         <Route path="/products" element={<ProductsPage />} />
+
+        <Route path="/feedback" element={<FeedbackPage />} />
+
+        <Route
+  path="/admin/feedback"
+  element={<Navigate to="/admin/dashboard/feedback" replace />}
+/>
 
         {/* Unknown URLs */}
         <Route path="*" element={<Navigate to="/" replace />} />
