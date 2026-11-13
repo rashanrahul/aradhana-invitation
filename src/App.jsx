@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Link } from 'react-router-dom'
 import { supabase } from './lib/supabaseClient'
 import AdminProducts from './pages/AdminProducts'
 import AdminOrders from './pages/AdminOrders'
+import Chatbot from './components/Chatbot'
 import ProductsPage from './pages/ProductsPage'
 import TrackOrder from './pages/TrackOrder'
 import WhatsAppButton from './components/WhatsAppButton'
@@ -496,6 +497,7 @@ function App() {
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
       <WhatsAppButton />
+      <Chatbot />
     </BrowserRouter>
   )
 }
