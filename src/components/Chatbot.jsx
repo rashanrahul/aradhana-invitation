@@ -9,11 +9,59 @@ import {
   Trash2
 } from 'lucide-react'
 
+const questionKeywords = [
+  {
+    id: 'forgot',
+    keywords: ['forgot', 'lost', 'අමතක', 'නැතිවෙලා', 'නැතිවුණා']
+  },
+  {
+    id: 'track',
+    keywords: ['track', 'tracking', 'order status', 'where is my order', 'ඇණවුම track', 'තත්ත්වය', 'පරීක්ෂා']
+  },
+  {
+    id: 'prices',
+    keywords: ['price', 'prices', 'cost', 'package', 'packages', 'මිල', 'ගණන්', 'පැකේජ']
+  },
+  {
+    id: 'order',
+    keywords: ['how to order', 'place an order', 'ordering', 'buy', 'order කරන', 'ඇණවුමක් දා', 'මිලදී']
+  },
+  {
+    id: 'wedding',
+    keywords: ['wedding', 'marriage', 'විවාහ', 'මංගල']
+  },
+  {
+    id: 'birthday',
+    keywords: ['birthday', 'උපන්දිනය', 'උපන්දින']
+  },
+  {
+    id: 'engagement',
+    keywords: ['engagement', 'විවාහ ගිවිස', 'ගිවිස ගැනීම']
+  },
+  {
+    id: 'corporate',
+    keywords: ['corporate', 'business', 'company', 'office', 'ආයතනික', 'ව්‍යාපාරික']
+  },
+  {
+    id: 'special',
+    keywords: ['special event', 'other event', 'anniversary', 'විශේෂ අවස්ථා', 'සංවත්සර']
+  },
+  {
+    id: 'feedback',
+    keywords: ['feedback', 'review', 'experience', 'අදහස්', 'ප්‍රතිචාර']
+  },
+  {
+    id: 'contact',
+    keywords: ['contact', 'whatsapp', 'support', 'සම්බන්ධ', 'උදව්', 'සහාය']
+  }
+]
+
 export default function Chatbot() {
   const navigate = useNavigate()
 
   const [isOpen, setIsOpen] = useState(false)
   const [language, setLanguage] = useState('en')
+  const [draft, setDraft] = useState('')
 
   const [messages, setMessages] = useState([
     {
@@ -219,12 +267,12 @@ export default function Chatbot() {
   const currentContent = content[language]
 
   // Send question and answer
-  const sendMessage = (question) => {
+  const sendMessage = (question, userText = question.label) => {
     setMessages(prev => [
       ...prev,
       {
         sender: 'user',
-        text: question.label
+        text: userText
       },
       {
         sender: 'bot',
@@ -246,6 +294,37 @@ export default function Chatbot() {
     'noopener,noreferrer'
   )
 }
+  }
+
+  const submitQuestion = (event) => {
+    event.preventDefault()
+    const text = draft.trim()
+    if (!text) return
+
+    const normalizedText = text.toLocaleLowerCase()
+    const matchedRule = questionKeywords.find(({ keywords }) =>
+      keywords.some(keyword => normalizedText.includes(keyword.toLocaleLowerCase()))
+    )
+    const matchedQuestion = currentContent.questions.find(
+      question => question.id === matchedRule?.id
+    )
+
+    setDraft('')
+    if (matchedQuestion) {
+      sendMessage(matchedQuestion, text)
+      return
+    }
+
+    setMessages(prev => [
+      ...prev,
+      { sender: 'user', text },
+      {
+        sender: 'bot',
+        text: language === 'si'
+          ? 'කණගාටුයි, ඒ ගැන මට තවම නිශ්චිත පිළිතුරක් නැහැ. පහත ඇති මාතෘකාවක් තෝරන්න, නැත්නම් WhatsApp හරහා අපව සම්බන්ධ කරගන්න.'
+          : "Sorry, I don't have a specific answer for that yet. Choose a topic below or contact us through WhatsApp."
+      }
+    ])
   }
 
   // WhatsApp support
@@ -372,6 +451,24 @@ export default function Chatbot() {
           {/* Language Selection */}
 
           <div className="p-3 space-y-3 bg-white">
+
+          <form onSubmit={submitQuestion} className="flex gap-2">
+            <input
+              type="text"
+              value={draft}
+              onChange={event => setDraft(event.target.value)}
+              placeholder={language === 'si' ? 'ඔබගේ ප්‍රශ්නය ලියන්න...' : 'Type your question...'}
+              aria-label={language === 'si' ? 'ඔබගේ ප්‍රශ්නය' : 'Your question'}
+              className="min-w-0 flex-1 rounded-lg border border-pink-200 px-3 py-2 text-sm text-gray-800 placeholder:text-gray-400 focus:border-pink-500 focus:outline-none focus:ring-1 focus:ring-pink-500"
+            />
+            <button
+              type="submit"
+              disabled={!draft.trim()}
+              className="rounded-lg bg-pink-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-pink-700 disabled:cursor-not-allowed disabled:opacity-50"
+            >
+              {language === 'si' ? 'යවන්න' : 'Send'}
+            </button>
+          </form>
 
             <div className="flex gap-2">
 
