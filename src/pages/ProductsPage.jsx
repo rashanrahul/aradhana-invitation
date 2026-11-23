@@ -229,13 +229,7 @@ Please provide more details.`
 
         <div className="catalog-topbar">
           <Link to="/" className="catalog-brand" aria-label="Aradhana Invitation home">
-            <span className="catalog-brand-logo-frame">
-              <img src="/logo.png" alt="" className="catalog-brand-logo" />
-            </span>
-            <span className="catalog-brand-wordmark">
-              <strong>ARADHANA</strong>
-              <small>INVITATION</small>
-            </span>
+            <img src="/logo.svg" alt="Aradhana Invitation" className="catalog-brand-logo" />
           </Link>
           <div className="catalog-topbar-links">
             <Link to="/" className="catalog-topbar-link">Home</Link>
@@ -348,7 +342,7 @@ Please provide more details.`
     LKR {Number(product.price).toLocaleString()}
   </span>
 
-  <div className="flex items-center gap-2">
+  <div className="flex flex-wrap items-center gap-2">
     {product.video_url && (
       <button
         onClick={() => setSelectedProduct(product)}

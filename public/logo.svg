@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 440 160" fill="none">
+  <defs>
+    <linearGradient id="gold" x1="25" y1="24" x2="137" y2="120" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#E0C27B"/>
+      <stop offset=".55" stop-color="#C6A15B"/>
+      <stop offset="1" stop-color="#A9823E"/>
+    </linearGradient>
+  </defs>
+  <g stroke="url(#gold)" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M43 115c9-10 20-35 29-54l14-34q2-5 4 0l15 35c9 20 19 43 28 53" stroke-width="4.2"/>
+    <path d="M39 118q7-5 15-4m69 0q8-1 15 4" stroke-width="3"/>
+    <path d="M64 80c15-4 33-4 48 0" stroke-width="2.4"/>
+    <path d="M69 87q19-4 38 0" stroke-width="1.2"/>
+    <path d="M16 106c26-3 46-15 64-35 14-16 21-32 32-35 8-2 14 3 13 10-1 7-8 10-16 5m-32 26c8-8 10-18 5-28-7 8-12 17-14 27m57-15 13-6 9 2-10 5m-121 9q4-6 10-8m-8 13q7-1 13-6" stroke-width="3.2"/>
+  </g>
+  <circle cx="114" cy="40" r="1.6" fill="#C6A15B"/>
+  <text x="77" y="151" fill="#C6A15B" font-family="Noto Serif Sinhala, Nirmala UI, Iskoola Pota, serif" font-size="27" text-anchor="middle">ආරාධනා</text>
+  <text x="181" y="88" fill="#514052" font-family="Georgia, Times New Roman, serif" font-size="38" letter-spacing="3.2">ARADHANA</text>
+  <text x="184" y="117" fill="#8A7B89" font-family="Georgia, Times New Roman, serif" font-size="13" letter-spacing="5.8">INVITATION</text>
+</svg>

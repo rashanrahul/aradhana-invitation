@@ -53,13 +53,7 @@ export default function FeedbackPage() {
       <div className="feedback-page-inner mx-auto max-w-5xl px-5">
         <header className="catalog-topbar">
           <Link to="/" className="catalog-brand" aria-label="Aradhana Invitation home">
-            <span className="catalog-brand-logo-frame">
-              <img src="/logo.png" alt="" className="catalog-brand-logo" />
-            </span>
-            <span className="catalog-brand-wordmark">
-              <strong>ARADHANA</strong>
-              <small>INVITATION</small>
-            </span>
+            <img src="/logo.svg" alt="Aradhana Invitation" className="catalog-brand-logo" />
           </Link>
           <nav className="catalog-topbar-links" aria-label="Customer navigation">
             <Link to="/" className="catalog-topbar-link">Home</Link>

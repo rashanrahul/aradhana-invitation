@@ -85,6 +85,7 @@ function HomePage() {
       contact: 'Contact',
       trackOrder: 'Track Your Order',
       shopNow: 'Shop Now',
+      customerfeedback: 'Customer Feedback',
       heroSmall: 'MAKE EVERY MOMENT SPECIAL',
       heroTitle: 'Beautiful Invitations,',
       heroTitle2: 'Unforgettable Moments.',
@@ -109,6 +110,7 @@ function HomePage() {
       contact: 'සම්බන්ධ වන්න',
       trackOrder: 'ඔබේ ඇණවුම පරීක්ෂා කරන්න',
       shopNow: 'නිර්මාණ මිලදී ගන්න',
+      customerfeedback: 'පාරිභෝගික ප්‍රතිපෝෂණය',
       heroSmall: 'ඔබේ සෑම මොහොතක්ම විශේෂ කරගන්න',
       heroTitle: 'ලස්සන ආරාධනා,',
       heroTitle2: 'අමතක නොවන මතකයන්.',
@@ -142,21 +144,13 @@ function HomePage() {
       <header className="store-header sticky top-0 z-50 border-b backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-5">
 
-          <Link to="/" className="store-brand flex items-center gap-3" aria-label="Aradhana Invitation home">
+          <Link to="/" className="store-brand flex items-center" aria-label="Aradhana Invitation home">
             <span className="store-brand-logo-frame">
               <img
-                src="/logo.png"
-                alt=""
+                src="/logo.svg"
+                alt="Aradhana Invitation"
                 className="store-brand-logo"
               />
-            </span>
-            <span>
-              <span className="store-brand-wordmark block font-serif font-bold text-[#76534b]">
-                ARADHANA
-              </span>
-              <span className="store-brand-subtitle mt-1 block text-[10px] text-[#76534b]">
-                INVITATION
-              </span>
             </span>
           </Link>
           
@@ -182,7 +176,7 @@ function HomePage() {
   </Link>
 
   <Link to="/feedback" className="hover:text-[#76534b]">
-  Customer Feedback
+  {t.customerfeedback}
 </Link>
 
   <Link
@@ -254,7 +248,7 @@ function HomePage() {
       to="/feedback"
       onClick={() => setMenuOpen(false)}
     >
-      Customer Feedback
+      {t.customerfeedback}
     </Link>
 
     <Link

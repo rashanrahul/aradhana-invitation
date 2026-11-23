@@ -50,13 +50,7 @@ export default function BrandFooter() {
         <div className="brand-footer-main">
           <div className="brand-footer-intro">
             <Link to="/" className="brand-footer-brand" aria-label="Aradhana Invitation home">
-              <span className="brand-footer-logo-frame">
-                <img src="/logo.png" alt="" className="brand-footer-logo" />
-              </span>
-              <span className="brand-footer-wordmark">
-                <strong>ARADHANA</strong>
-                <small>INVITATION</small>
-              </span>
+              <img src="/logo.svg" alt="Aradhana Invitation" className="brand-footer-logo" />
             </Link>
             <p>Beautiful beginnings for your most meaningful moments.</p>
           </div>

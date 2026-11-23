@@ -188,9 +188,7 @@ export default function AdminDashboard() {
     <div className="admin-shell min-h-screen md:flex">
       <aside className="admin-sidebar p-5 text-white md:min-h-screen md:w-64 md:shrink-0">
         <Link to="/admin/dashboard" className="admin-brand" aria-label="Aradhana Invitation admin dashboard">
-          <span className="admin-brand-logo-frame">
-            <img src="/logo.png" alt="" className="admin-brand-logo" />
-          </span>
+          <img src="/logo.svg" alt="Aradhana Invitation" className="admin-brand-logo" />
           <span className="admin-brand-caption">STUDIO ADMIN</span>
         </Link>
 

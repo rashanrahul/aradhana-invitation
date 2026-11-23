@@ -375,11 +375,11 @@ export default function Chatbot() {
       {/* Chatbot Window */}
 
       {isOpen && (
-        <div className="fixed bottom-24 right-4 sm:right-6 z-50 w-[340px] max-w-[calc(100vw-32px)] bg-white rounded-2xl shadow-2xl border border-pink-100 overflow-hidden">
+        <div className="fixed bottom-24 right-4 sm:right-6 z-50 flex max-h-[calc(100dvh-112px)] w-[340px] max-w-[calc(100vw-32px)] flex-col overflow-hidden rounded-2xl border border-pink-100 bg-white shadow-2xl">
 
           {/* Header */}
 
-          <div className="bg-gradient-to-r from-pink-600 to-rose-500 text-white p-4 flex items-center gap-3">
+          <div className="flex shrink-0 items-center gap-3 bg-gradient-to-r from-pink-600 to-rose-500 p-4 text-white">
 
             <div className="bg-white/20 p-2 rounded-full">
               <Bot size={26} />
@@ -415,7 +415,7 @@ export default function Chatbot() {
 
           {/* Messages */}
 
-          <div className="p-3 h-72 overflow-y-auto space-y-3 bg-pink-50">
+          <div className="min-h-0 flex-1 space-y-3 overflow-y-auto bg-pink-50 p-3">
 
             {messages.map((msg, index) => (
               <div
@@ -450,7 +450,7 @@ export default function Chatbot() {
 
           {/* Language Selection */}
 
-          <div className="p-3 space-y-3 bg-white">
+          <div className="shrink-0 space-y-3 bg-white p-3">
 
           <form onSubmit={submitQuestion} className="flex gap-2">
             <input

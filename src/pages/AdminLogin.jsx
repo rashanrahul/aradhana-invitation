@@ -50,13 +50,7 @@ export default function AdminLogin() {
     <div className="admin-login min-h-screen flex flex-col p-5">
       <header className="admin-login-nav">
         <Link to="/" className="admin-login-nav-brand" aria-label="Aradhana Invitation home">
-          <span className="admin-login-nav-logo-frame">
-            <img src="/logo.png" alt="" />
-          </span>
-          <span>
-            <strong>ARADHANA</strong>
-            <small>INVITATION</small>
-          </span>
+          <img src="/logo.svg" alt="Aradhana Invitation" />
         </Link>
         <Link to="/" className="admin-login-nav-link">View storefront</Link>
       </header>
@@ -66,7 +60,7 @@ export default function AdminLogin() {
 
         <div className="text-center mb-8">
           <div className="admin-login-logo-frame">
-            <img src="/logo.png" alt="Aradhana Invitation" className="admin-login-logo" />
+            <img src="/logo.svg" alt="Aradhana Invitation" className="admin-login-logo" />
           </div>
           <p className="mb-2 text-[10px] font-semibold uppercase tracking-[0.28em] text-[#a77b6e]">
             Welcome back

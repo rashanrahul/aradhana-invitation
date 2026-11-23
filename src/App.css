@@ -19,7 +19,6 @@ html {
 }
 
 body {
-  min-width: 320px;
   background: var(--paper);
   color: var(--ink);
   font-family: "Aptos", "Segoe UI", sans-serif;
@@ -74,26 +73,20 @@ textarea:focus-visible {
 }
 
 .store-brand-logo-frame {
-  display: grid;
-  width: 102px;
-  height: 60px;
+  display: block;
+  width: 218px;
+  height: auto;
   flex: 0 0 auto;
-  place-items: center;
-  border: 1px solid #e8dfd3;
-  border-radius: 12px;
-  background: #fffdf8;
-  box-shadow: 0 5px 16px rgb(65 45 38 / 7%);
-  transition: transform 180ms ease, box-shadow 180ms ease;
+  transition: transform 180ms ease;
 }
 
 .store-brand:hover .store-brand-logo-frame {
   transform: translateY(-1px);
-  box-shadow: 0 8px 20px rgb(65 45 38 / 10%);
 }
 
 .store-brand-logo {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
 }
 
@@ -360,9 +353,9 @@ textarea:focus-visible {
 
 .brand-footer-main {
   display: grid;
-  grid-template-columns: minmax(210px, 1fr) minmax(400px, 1.5fr) minmax(190px, 0.8fr);
+  grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.35fr) minmax(0, 0.75fr);
   align-items: start;
-  gap: 48px;
+  gap: clamp(16px, 3vw, 40px);
   padding-bottom: 42px;
 }
 
@@ -378,21 +371,10 @@ textarea:focus-visible {
   transform: translateY(-2px);
 }
 
-.brand-footer-logo-frame {
-  display: grid;
-  width: 104px;
-  height: 66px;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 30%);
-  border-radius: 12px;
-  background: #f7f3e9;
-  padding: 4px;
-}
-
 .brand-footer-logo {
-  width: 100%;
-  height: 100%;
+  width: 205px;
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
 }
 
@@ -585,26 +567,12 @@ textarea:focus-visible {
 .admin-login-nav-brand {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
   color: var(--clay-dark);
 }
 
-.admin-login-nav-logo-frame {
-  display: grid;
-  width: 70px;
-  height: 46px;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid #e8dfd3;
-  border-radius: 9px;
-  background: #f7f3e9;
-  padding: 3px;
-}
-
-.admin-login-nav-logo-frame img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
+.admin-login-nav-brand > img {
+  width: 195px;
+  height: auto;
 }
 
 .admin-login-nav-brand > span:last-child {
@@ -688,22 +656,14 @@ textarea:focus-visible {
 }
 
 .admin-login-logo-frame {
-  display: grid;
-  width: 176px;
-  height: 100px;
+  width: 290px;
+  max-width: 100%;
   margin: 0 auto 20px;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid #e8dfd3;
-  border-radius: 16px;
-  background: #f7f3e9;
-  padding: 5px;
-  box-shadow: 0 8px 24px rgb(65 45 38 / 9%);
 }
 
 .admin-login-logo {
   width: 100%;
-  height: 100%;
+  height: auto;
   object-fit: contain;
 }
 
@@ -757,23 +717,10 @@ textarea:focus-visible {
   text-align: center;
 }
 
-.admin-brand-logo-frame {
-  display: grid;
-  width: 100%;
-  max-width: 184px;
-  height: 104px;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid rgb(255 255 255 / 34%);
-  border-radius: 15px;
-  background: #f7f3e9;
-  padding: 5px;
-  box-shadow: 0 10px 24px rgb(0 0 0 / 16%);
-}
-
 .admin-brand-logo {
-  width: 100%;
-  height: 100%;
+  width: 195px;
+  max-width: 100%;
+  height: auto;
   object-fit: contain;
 }
 
@@ -1017,6 +964,7 @@ textarea:focus-visible {
 
 .catalog-topbar {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   justify-content: space-between;
   gap: 16px;
@@ -1028,28 +976,13 @@ textarea:focus-visible {
 .catalog-brand {
   display: inline-flex;
   align-items: center;
-  gap: 11px;
   color: var(--clay-dark);
   line-height: 1;
 }
 
-.catalog-brand-logo-frame {
-  display: grid;
-  width: 86px;
-  height: 52px;
-  flex: 0 0 auto;
-  place-items: center;
-  overflow: hidden;
-  border: 1px solid #e8dfd3;
-  border-radius: 9px;
-  background: #fffdf8;
-  padding: 3px;
-  box-shadow: 0 5px 16px rgb(65 45 38 / 7%);
-}
-
 .catalog-brand-logo {
-  width: 100%;
-  height: 100%;
+  width: 210px;
+  max-width: 100%;
   object-fit: contain;
 }
 
@@ -1073,13 +1006,14 @@ textarea:focus-visible {
 
 .catalog-topbar-links {
   display: flex;
+  flex-wrap: wrap;
   align-items: center;
   gap: 10px;
 }
 
 .catalog-topbar-link {
   display: inline-flex;
-  min-height: 40px;
+  min-height: 44px;
   align-items: center;
   justify-content: center;
   gap: 6px;
@@ -1246,9 +1180,7 @@ textarea:focus-visible {
   }
 
   .store-brand-logo-frame {
-    width: 64px;
-    height: 42px;
-    border-radius: 9px;
+    width: clamp(140px, 46vw, 180px);
   }
 
   .store-brand-wordmark {
@@ -1359,6 +1291,19 @@ textarea:focus-visible {
     padding: 16px;
   }
 
+  .admin-login-nav {
+    gap: 8px;
+  }
+
+  .admin-login-nav-brand > img {
+    width: clamp(135px, 48vw, 195px);
+  }
+
+  .admin-login-nav-link {
+    padding: 8px 10px;
+    white-space: nowrap;
+  }
+
   .admin-login-content {
     min-height: 560px;
     padding: 34px 0;
@@ -1373,6 +1318,9 @@ textarea:focus-visible {
   }
 
   .admin-topbar-link {
+    width: 44px;
+    min-height: 44px;
+    justify-content: center;
     padding: 9px;
     font-size: 0;
   }
@@ -1403,7 +1351,7 @@ textarea:focus-visible {
   }
 
   .catalog-topbar-link {
-    min-height: 38px;
+    min-height: 44px;
     padding: 0 11px;
     font-size: 11px;
   }
@@ -1412,9 +1360,8 @@ textarea:focus-visible {
     gap: 7px;
   }
 
-  .catalog-brand-logo-frame {
-    width: 60px;
-    height: 40px;
+  .catalog-brand-logo {
+    width: 155px;
   }
 
   .catalog-brand-wordmark strong {
@@ -1466,8 +1413,7 @@ textarea:focus-visible {
   }
 
   .store-brand-logo-frame {
-    width: 86px;
-    height: 52px;
+    width: 190px;
   }
 
   .store-brand-wordmark {
@@ -1490,6 +1436,37 @@ textarea:focus-visible {
   .language-toggle {
     padding: 8px 10px;
     white-space: nowrap;
+  }
+}
+
+@media (min-width: 768px) and (max-width: 1023px) {
+  .brand-footer-main {
+    grid-template-columns: minmax(0, 1fr) minmax(190px, 0.8fr);
+    gap: 28px;
+  }
+
+  .brand-footer-intro {
+    grid-column: 1;
+    grid-row: 1;
+  }
+
+  .brand-footer-social {
+    grid-column: 1 / -1;
+    grid-row: 2;
+  }
+
+  .brand-footer-contact {
+    grid-column: 2;
+    grid-row: 1;
+  }
+
+  .admin-main .brand-footer-main {
+    grid-template-columns: 1fr;
+  }
+
+  .admin-main .brand-footer-main > * {
+    grid-column: auto;
+    grid-row: auto;
   }
 }
 
@@ -1523,10 +1500,8 @@ textarea:focus-visible {
   background: rgb(255 250 246 / 95%);
 }
 
-.store-brand-logo-frame,
-.catalog-brand-logo-frame {
-  border-color: #efdae0;
-  background: #fff;
+.store-brand-logo-frame {
+  background: transparent;
 }
 
 .store-nav,
